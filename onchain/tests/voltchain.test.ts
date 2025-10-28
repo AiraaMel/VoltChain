@@ -1,23 +1,23 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { Enx } from "../target/types/enx";
+import { Voltchain } from "../target/types/voltchain";
 import { expect } from "chai";
 import { Connection, Keypair, PublicKey, SystemProgram } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID, createMint, getOrCreateAssociatedTokenAccount, mintTo } from "@solana/spl-token";
 
-describe("ENX Energy Platform", () => {
+describe("VoltChain Energy Platform", () => {
   // Configure the client to use the local cluster
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-  const program = anchor.workspace.Enx as Program<Enx>;
+  const program = anchor.workspace.Voltchain as Program<Voltchain>;
   const connection = provider.connection;
 
   // Test accounts
   let authority: Keypair;
   let user1: Keypair;
   let user2: Keypair;
-  let enxMint: PublicKey;
+  let voltchainMint: PublicKey;
 
   // PDAs
   let poolPda: PublicKey;
@@ -38,8 +38,8 @@ describe("ENX Energy Platform", () => {
     // Wait for airdrops to confirm
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Create ENX mint
-    enxMint = await createMint(
+    // Create VoltChain mint
+    voltchainMint = await createMint(
       connection,
       authority,
       authority.publicKey,
@@ -61,7 +61,7 @@ describe("ENX Energy Platform", () => {
 
   it("Initializes the pool", async () => {
     const tx = await program.methods
-      .initializePool(authority.publicKey, enxMint)
+      .initializePool(authority.publicKey, voltchainMint)
       .accounts({
         pool: poolPda,
         payer: authority.publicKey,
@@ -75,7 +75,7 @@ describe("ENX Energy Platform", () => {
     // Verify pool state
     const poolAccount = await program.account.pool.fetch(poolPda);
     expect(poolAccount.authority.toString()).to.equal(authority.publicKey.toString());
-    expect(poolAccount.enxMint.toString()).to.equal(enxMint.toString());
+    expect(poolAccount.voltchainMint.toString()).to.equal(voltchainMint.toString());
     expect(poolAccount.totalKwh.toNumber()).to.equal(0);
     expect(poolAccount.period.toNumber()).to.equal(0);
   });
@@ -256,12 +256,12 @@ describe("ENX Energy Platform", () => {
 
     expect(user1Claim.user.toString()).to.equal(user1.publicKey.toString());
     expect(user1Claim.saleId.toNumber()).to.equal(saleId);
-    expect(user1Claim.burnedEnx.toNumber()).to.equal(kwhToBurn1);
+    expect(user1Claim.burnedVoltchain.toNumber()).to.equal(kwhToBurn1);
     expect(user1Claim.claimed).to.be.false;
 
     expect(user2Claim.user.toString()).to.equal(user2.publicKey.toString());
     expect(user2Claim.saleId.toNumber()).to.equal(saleId);
-    expect(user2Claim.burnedEnx.toNumber()).to.equal(kwhToBurn2);
+    expect(user2Claim.burnedVoltchain.toNumber()).to.equal(kwhToBurn2);
     expect(user2Claim.claimed).to.be.false;
   });
 

@@ -6,18 +6,18 @@ pub mod states;
 
 use instructions::*;
 
-declare_id!("JAALeYFVQtZtqFvVTmfQeffq29JYCZcYJMKA5DbMr2DF");
+declare_id!("DjVsxwuSSeqrogEQUGZbD6hZBsCKLQEsqXNJAgov3mwY");
 
 #[program]
-pub mod enx {
+pub mod voltchain {
     use super::*;
 
     pub fn initialize_pool(
         ctx: Context<InitializePool>,
         authority: Pubkey,
-        enx_mint: Pubkey,
+        voltchain_mint: Pubkey,
     ) -> Result<()> {
-        instructions::initialize_pool::handler(ctx, authority, enx_mint)
+        instructions::initialize_pool::handler(ctx, authority, voltchain_mint)
     }
 
     pub fn register_user(ctx: Context<RegisterUser>) -> Result<()> {

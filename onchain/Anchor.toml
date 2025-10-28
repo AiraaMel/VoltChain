@@ -3,10 +3,10 @@ seeds = false
 skip-lint = false
 
 [programs.devnet]
-enx = "JAALeYFVQtZtqFvVTmfQeffq29JYCZcYJMKA5DbMr2DF"
+voltchain = "DjVsxwuSSeqrogEQUGZbD6hZBsCKLQEsqXNJAgov3mwY"
 
 [programs.localnet]
-enx = "JAALeYFVQtZtqFvVTmfQeffq29JYCZcYJMKA5DbMr2DF"
+voltchain = "DjVsxwuSSeqrogEQUGZbD6hZBsCKLQEsqXNJAgov3mwY"
 
 [registry]
 url = "https://api.apr.dev"

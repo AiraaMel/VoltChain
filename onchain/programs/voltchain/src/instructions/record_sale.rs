@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::states::*;
-use crate::errors::EnxError;
+use crate::errors::VoltchainError;
 
 #[derive(Accounts)]
 #[instruction(kwh_sold_micro: u64, revenue_brl_cents: u64, fee_bps: u16)]
@@ -9,7 +9,7 @@ pub struct RecordSale<'info> {
         mut,
         seeds = [b"pool"],
         bump = pool.bump,
-        constraint = pool.authority == authority.key() @ EnxError::InvalidAuthority
+        constraint = pool.authority == authority.key() @ VoltchainError::InvalidAuthority
     )]
     pub pool: Account<'info, Pool>,
     
@@ -48,7 +48,7 @@ pub fn handler(
     // Increment period for next sale
     pool.period = pool.period
         .checked_add(1)
-        .ok_or(EnxError::InvalidAuthority)?;
+        .ok_or(VoltchainError::InvalidAuthority)?;
 
     emit!(SaleRecorded {
         sale_id: sale.id,

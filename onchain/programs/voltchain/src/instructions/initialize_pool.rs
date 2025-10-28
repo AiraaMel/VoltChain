@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use crate::states::*;
 
 #[derive(Accounts)]
-#[instruction(authority: Pubkey, enx_mint: Pubkey)]
+#[instruction(authority: Pubkey, voltchain_mint: Pubkey)]
 pub struct InitializePool<'info> {
     #[account(
         init,
@@ -22,18 +22,18 @@ pub struct InitializePool<'info> {
 pub fn handler(
     ctx: Context<InitializePool>,
     authority: Pubkey,
-    enx_mint: Pubkey,
+    voltchain_mint: Pubkey,
 ) -> Result<()> {
     let pool = &mut ctx.accounts.pool;
     pool.authority = authority;
-    pool.enx_mint = enx_mint;
+    pool.voltchain_mint = voltchain_mint;
     pool.total_kwh = 0;
     pool.period = 0;
     pool.bump = ctx.bumps.pool;
 
     emit!(PoolInitialized {
         authority,
-        enx_mint,
+        voltchain_mint,
     });
 
     Ok(())
@@ -42,5 +42,5 @@ pub fn handler(
 #[event]
 pub struct PoolInitialized {
     pub authority: Pubkey,
-    pub enx_mint: Pubkey,
+    pub voltchain_mint: Pubkey,
 }

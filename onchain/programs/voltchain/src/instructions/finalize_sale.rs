@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::states::*;
-use crate::errors::EnxError;
+use crate::errors::VoltchainError;
 
 #[derive(Accounts)]
 #[instruction(sale_id: u64)]
@@ -8,7 +8,7 @@ pub struct FinalizeSale<'info> {
     #[account(
         seeds = [b"pool"],
         bump = pool.bump,
-        constraint = pool.authority == authority.key() @ EnxError::InvalidAuthority
+        constraint = pool.authority == authority.key() @ VoltchainError::InvalidAuthority
     )]
     pub pool: Account<'info, Pool>,
     
@@ -16,7 +16,7 @@ pub struct FinalizeSale<'info> {
         mut,
         seeds = [b"sale", sale_id.to_le_bytes().as_ref()],
         bump = sale.bump,
-        constraint = !sale.finalized @ EnxError::SaleAlreadyFinalized
+        constraint = !sale.finalized @ VoltchainError::SaleAlreadyFinalized
     )]
     pub sale: Account<'info, Sale>,
     

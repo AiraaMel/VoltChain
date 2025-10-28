@@ -1,14 +1,14 @@
 use anchor_lang::prelude::*;
 
 #[error_code]
-pub enum EnxError {
+pub enum VoltchainError {
     #[msg("Invalid authority")]
     InvalidAuthority,
     #[msg("Sale not found")]
     SaleNotFound,
     #[msg("Sale already finalized")]
     SaleAlreadyFinalized,
-    #[msg("Insufficient ENX balance")]
+    #[msg("Insufficient VoltChain balance")]
     InsufficientBalance,
     #[msg("User position not found")]
     UserPositionNotFound,

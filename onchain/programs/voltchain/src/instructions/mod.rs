@@ -5,6 +5,7 @@ pub mod record_sale;
 pub mod burn_and_mark;
 pub mod finalize_sale;
 
+// Re-export all items
 pub use initialize_pool::*;
 pub use register_user::*;
 pub use energy_report::*;

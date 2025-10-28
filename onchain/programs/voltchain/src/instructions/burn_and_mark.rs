@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::states::*;
-use crate::errors::EnxError;
+use crate::errors::VoltchainError;
 
 #[derive(Accounts)]
 #[instruction(sale_id: u64, kwh_to_burn_micro: u64)]
@@ -15,7 +15,7 @@ pub struct BurnAndMark<'info> {
         mut,
         seeds = [b"user_position", owner.key().as_ref()],
         bump = user_position.bump,
-        constraint = user_position.owner == owner.key() @ EnxError::InvalidAuthority
+        constraint = user_position.owner == owner.key() @ VoltchainError::InvalidAuthority
     )]
     pub user_position: Account<'info, UserPosition>,
     
@@ -45,19 +45,19 @@ pub fn handler(
     // Check if user has enough accrued kWh
     require!(
         user_position.accrued_kwh >= kwh_to_burn_micro,
-        EnxError::InsufficientBalance
+        VoltchainError::InsufficientBalance
     );
 
-    // Update user position (burn ENX)
+    // Update user position (burn VoltChain)
     user_position.accrued_kwh = user_position.accrued_kwh
         .checked_sub(kwh_to_burn_micro)
-        .ok_or(EnxError::InsufficientBalance)?;
+        .ok_or(VoltchainError::InsufficientBalance)?;
 
     // Create user claim record
     user_claim.user = ctx.accounts.owner.key();
     user_claim.sale_id = sale_id;
     user_claim.claimable_brl_cents = 0; // Will be calculated off-chain
-    user_claim.burned_enx = kwh_to_burn_micro;
+    user_claim.burned_voltchain = kwh_to_burn_micro;
     user_claim.claimed = false;
     user_claim.bump = ctx.bumps.user_claim;
 

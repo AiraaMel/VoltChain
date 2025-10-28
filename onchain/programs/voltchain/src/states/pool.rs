@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 #[account]
 pub struct Pool {
     pub authority: Pubkey,
-    pub enx_mint: Pubkey,
+    pub voltchain_mint: Pubkey,
     pub total_kwh: u64, // microkWh
     pub period: u64,
     pub bump: u8,

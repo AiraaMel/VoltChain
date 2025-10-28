@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::states::*;
-use crate::errors::EnxError;
+use crate::errors::VoltchainError;
 
 #[derive(Accounts)]
 pub struct EnergyReport<'info> {
@@ -15,7 +15,7 @@ pub struct EnergyReport<'info> {
         mut,
         seeds = [b"user_position", owner.key().as_ref()],
         bump = user_position.bump,
-        constraint = user_position.owner == owner.key() @ EnxError::InvalidAuthority
+        constraint = user_position.owner == owner.key() @ VoltchainError::InvalidAuthority
     )]
     pub user_position: Account<'info, UserPosition>,
     
@@ -31,15 +31,15 @@ pub fn handler(
 
     user_position.accrued_kwh = user_position.accrued_kwh
         .checked_add(delta_kwh_micro)
-        .ok_or(EnxError::InvalidAuthority)?;
+        .ok_or(VoltchainError::InvalidAuthority)?;
     
     user_position.lifetime_kwh = user_position.lifetime_kwh
         .checked_add(delta_kwh_micro)
-        .ok_or(EnxError::InvalidAuthority)?;
+        .ok_or(VoltchainError::InvalidAuthority)?;
 
     pool.total_kwh = pool.total_kwh
         .checked_add(delta_kwh_micro)
-        .ok_or(EnxError::InvalidAuthority)?;
+        .ok_or(VoltchainError::InvalidAuthority)?;
 
     emit!(EnergyReported {
         owner: ctx.accounts.owner.key(),
