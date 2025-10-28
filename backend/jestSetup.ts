@@ -1,20 +1,27 @@
-// Jest setup file for VoltChain Energy Platform tests
-import { Connection, PublicKey } from "@solana/web3.js";
+// Jest setup file
+import dotenv from 'dotenv';
 
-// Global test configuration
-beforeAll(async () => {
-  // Setup global test configuration if needed
-});
+// Load test environment variables
+dotenv.config({ path: 'test.env' });
 
-afterAll(async () => {
-  // Cleanup after all tests
-});
+// Set test environment variables
+process.env.NODE_ENV = 'test';
+process.env.LOG_LEVEL = 'error'; // Reduce log noise during tests
+process.env.ADMIN_TOKEN = 'test-admin-token';
+process.env.SUPABASE_URL = 'https://test.supabase.co';
+process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
+process.env.SOLANA_RPC_URL = 'https://api.devnet.solana.com';
+process.env.ONCHAIN_ENABLED = 'false';
 
-// Helper functions for tests
-export const getTestConnection = () => {
-  return new Connection("http://127.0.0.1:8899", "confirmed");
+// Mock console methods to reduce noise during tests
+global.console = {
+  ...console,
+  log: jest.fn(),
+  debug: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
 };
 
-export const getDevnetConnection = () => {
-  return new Connection("https://api.devnet.solana.com", "confirmed");
-};
+// Global test timeout
+jest.setTimeout(30000);
