@@ -1,0 +1,32 @@
+{
+  "name": "enx-energy-platform",
+  "version": "0.1.0",
+  "description": "ENX Energy Token Platform - MVP",
+  "type": "module",
+  "scripts": {
+    "build": "anchor build",
+    "test": "anchor test",
+    "deploy": "anchor deploy",
+    "simulate": "ts-node scripts/simulate_iot.ts",
+    "listener": "ts-node scripts/listener.ts",
+    "settlement": "ts-node scripts/settlement.ts"
+  },
+  "workspace": {
+    "programs": [
+      "programs/enx"
+    ],
+    "scripts": [
+      "scripts/simulate_iot.ts",
+      "scripts/listener.ts", 
+      "scripts/settlement.ts"
+    ],
+    "tests": [
+      "tests/enx.test.ts"
+    ]
+  },
+  "anchor": {
+    "programId": "ENXEnergyToken1111111111111111111111111111111111",
+    "cluster": "devnet",
+    "wallet": "~/.config/solana/id.json"
+  }
+}
