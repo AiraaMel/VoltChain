@@ -1,7 +1,7 @@
 {
-  "name": "enx-backend",
+  "name": "voltchain-backend",
   "version": "1.0.0",
-  "description": "VoltChain/ENX Backend MVP",
+  "description": "VoltChain Backend MVP",
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
@@ -28,6 +28,6 @@
     "@types/supertest": "^2.0.16"
   },
   "keywords": ["voltage", "energy", "blockchain", "solana"],
-  "author": "VoltChain/ENX",
+  "author": "VoltChain",
   "license": "MIT"
 }

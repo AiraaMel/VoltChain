@@ -1,12 +1,13 @@
 {
-  "name": "enx-energy-platform",
+  "name": "voltchain-platform",
   "version": "0.1.0",
-  "description": "ENX Energy Token Platform - MVP",
+  "description": "VoltChain Energy Token Platform - MVP",
   "main": "index.js",
   "scripts": {
     "build": "anchor build",
     "test": "anchor test",
     "deploy": "anchor deploy",
+    "run:migrate": "ts-node onchain/migrations/deploy.ts",
     "run:simulate": "ts-node scripts/simulate_iot.ts",
     "run:listener": "ts-node scripts/listener.ts",
     "run:settlement": "ts-node scripts/settlement.ts",
@@ -17,7 +18,8 @@
     "solana",
     "anchor",
     "energy",
-    "tokenization"
+    "tokenization",
+    "voltchain"
   ],
   "author": "Empresa X",
   "license": "MIT",

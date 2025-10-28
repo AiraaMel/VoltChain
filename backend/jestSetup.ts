@@ -1,4 +1,4 @@
-// Jest setup file for ENX Energy Platform tests
+// Jest setup file for VoltChain Energy Platform tests
 import { Connection, PublicKey } from "@solana/web3.js";
 
 // Global test configuration

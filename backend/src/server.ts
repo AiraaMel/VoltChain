@@ -54,7 +54,7 @@ app.use('*', (req: express.Request, res: express.Response) => {
 
 // Start server
 app.listen(PORT, () => {
-  logger.info(`VoltChain/ENX Backend MVP running on port ${PORT}`);
+  logger.info(`VoltChain Backend MVP running on port ${PORT}`);
   logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
   logger.info(`On-chain enabled: ${process.env.ONCHAIN_ENABLED === 'true'}`);
   logger.info(`Solana configured: ${process.env.SOLANA_RPC_URL ? 'Yes' : 'No'}`);

@@ -1,6 +1,6 @@
-# VoltChain/ENX IoT
+# VoltChain IoT
 
-Implementações para dispositivos IoT que coletam dados de energia e enviam para a plataforma VoltChain/ENX.
+Implementações para dispositivos IoT que coletam dados de energia e enviam para a plataforma VoltChain.
 
 ## Status Atual
 

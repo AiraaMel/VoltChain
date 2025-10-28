@@ -1,4 +1,4 @@
--- VoltChain/ENX Database Schema
+-- VoltChain Database Schema
 -- Disable RLS for MVP simplicity
 
 -- Devices table

@@ -1,11 +1,11 @@
-# VoltChain/ENX Energy Platform
+# VoltChain Energy Platform
 
 Plataforma completa para monitoramento e gestão de energia renovável com integração blockchain.
 
 ## 🏗️ Arquitetura do Monorepo
 
 ```
-enx-energy-platform/
+voltchain-platform/
 ├── backend/          # API REST MVP (Node.js + TypeScript)
 ├── onchain/          # Programa Solana (Anchor Framework)
 ├── frontend/         # Interface Web (React + Next.js)
@@ -162,4 +162,4 @@ Para dúvidas ou problemas:
 
 ---
 
-**VoltChain/ENX** - Energia renovável na blockchain 🌱⚡
+**VoltChain** - Energia renovável na blockchain 🌱⚡

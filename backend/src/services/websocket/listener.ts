@@ -30,14 +30,14 @@ interface SaleFinalized {
 }
 
 async function startEventListener() {
-  console.log("Starting ENX Energy Platform Event Listener...");
+  console.log("Starting VoltChain Energy Platform Event Listener...");
   
   // Setup connection
   const connection = new Connection("https://api.devnet.solana.com", "confirmed");
-  const programId = new PublicKey("ENXEnergyToken1111111111111111111111111111111111");
+  const programId = new PublicKey("VoltChainEnergy1111111111111111111111111111111111");
   
   // Load the program
-  const program = new anchor.Program(require("../target/idl/enx.json"), programId);
+  const program = new anchor.Program(require("../target/idl/voltchain.json"), programId);
 
   console.log(`Connected to devnet`);
   console.log(`Program ID: ${programId.toString()}`);

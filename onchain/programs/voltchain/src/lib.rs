@@ -6,7 +6,7 @@ pub mod states;
 
 use instructions::*;
 
-declare_id!("DjVsxwuSSeqrogEQUGZbD6hZBsCKLQEsqXNJAgov3mwY");
+declare_id!("718k7JFp8Tf56eMTpTJMqmwNxME738nh48bXCiCm1BrR");
 
 #[program]
 pub mod voltchain {

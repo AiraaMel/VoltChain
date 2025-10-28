@@ -1,6 +1,6 @@
-# VoltChain/ENX Frontend
+# VoltChain Frontend
 
-Interface web para a plataforma VoltChain/ENX.
+Interface web para a plataforma VoltChain.
 
 ## Status Atual
 

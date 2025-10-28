@@ -2,11 +2,9 @@
 seeds = false
 skip-lint = false
 
-[programs.devnet]
-voltchain = "DjVsxwuSSeqrogEQUGZbD6hZBsCKLQEsqXNJAgov3mwY"
 
 [programs.localnet]
-voltchain = "DjVsxwuSSeqrogEQUGZbD6hZBsCKLQEsqXNJAgov3mwY"
+voltchain = "718k7JFp8Tf56eMTpTJMqmwNxME738nh48bXCiCm1BrR"
 
 [registry]
 url = "https://api.apr.dev"
@@ -17,4 +15,3 @@ wallet = "~/.config/solana/id.json"
 
 [scripts]
 test = "npx ts-mocha -p ./tsconfig.json -t 1000000 'tests/**/*.ts'"
-deploy = "npx ts-node ./migrations/deploy.ts"

@@ -1,6 +1,6 @@
-# VoltChain/ENX Backend MVP
+# VoltChain Backend MVP
 
-Backend minimalista para a plataforma VoltChain/ENX, implementando coleta de dados de energia e integração com blockchain Solana.
+Backend minimalista para a plataforma VoltChain, implementando coleta de dados de energia e integração com blockchain Solana.
 
 ## Stack
 

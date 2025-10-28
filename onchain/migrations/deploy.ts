@@ -1,4 +1,16 @@
 import "dotenv/config";
+
+import { chdir, cwd } from "process";
+console.log("🚀 Starting VoltChain migration...");
+console.log("📂 Current working directory:", cwd());
+
+// garante que o diretório atual seja /onchain (onde o Anchor.toml está)
+if (!cwd().endsWith("/onchain")) {
+  chdir(__dirname + "/..");
+  console.log("✅ Changed working directory to:", cwd());
+}
+
+
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { Voltchain } from "../target/types/voltchain";
