@@ -10,27 +10,53 @@ anchor.setProvider(provider);
 const program = anchor.workspace.Voltchain as Program<Voltchain>;
 
 async function main() {
-  console.log("🚀 VoltChain Energy Platform - Migration Script");
+  console.log("🚀 Deploying VoltChain Energy Platform...");
   console.log(`Program ID: ${program.programId.toString()}`);
   console.log(`Cluster: ${provider.connection.rpcEndpoint}`);
 
   const authority = provider.wallet.publicKey;
   console.log(`Authority: ${authority.toString()}`);
 
-  console.log("\n📋 Migration Steps:");
-  console.log("   1. ✅ Program deployed (already done)");
-  console.log("   2. ✅ Pool initialization (done via tests)");
-  console.log("   3. ✅ All tests passing");
-  
-  console.log("\n🎉 VoltChain Energy Platform is ready!");
-  console.log("\n📋 Available Commands:");
-  console.log("   • anchor deploy     - Deploy the program");
-  console.log("   • anchor test       - Run all tests (includes pool init)");
-  console.log("   • anchor build      - Build the program");
-  
-  console.log("\n💡 The migration is complete!");
-  console.log("   The pool is initialized automatically during tests.");
-  console.log("   All functionality is working as expected.");
+  const [poolPda] = PublicKey.findProgramAddressSync(
+    [Buffer.from("pool")],
+    program.programId
+  );
+  console.log(`Pool PDA: ${poolPda.toString()}`);
+
+  try {
+    console.log("Initializing pool...");
+
+    // Placeholder mint (replace with real mint later if needed)
+    const voltchainMint = new PublicKey("11111111111111111111111111111111");
+
+    const tx = await (program.methods as any)
+      .initializePool(authority, voltchainMint)
+      .accounts({
+        pool: poolPda,
+        payer: authority,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .rpc();
+
+    console.log(`✅ Pool initialized: ${tx}`);
+
+    const poolAccount = await program.account.pool.fetch(poolPda);
+    console.log("\n📊 Pool state:");
+    console.log(`Authority: ${poolAccount.authority.toString()}`);
+    console.log(`VoltChain Mint: ${poolAccount.voltchainMint.toString()}`);
+    console.log(`Total kWh: ${poolAccount.totalKwh.toString()} microkWh`);
+    console.log(`Period: ${poolAccount.period.toString()}`);
+
+    console.log("\n✅ VoltChain Energy Platform deployed successfully!");
+    console.log("\nNext steps:");
+    console.log("1️⃣ Run 'yarn run:simulate' to start IoT simulation");
+    console.log("2️⃣ Run 'yarn run:listener' to monitor events");
+    console.log("3️⃣ Run 'yarn run:settlement' to process sales");
+    console.log("4️⃣ Run 'yarn test' to run the test suite");
+  } catch (error) {
+    console.error("❌ Deployment failed:", error);
+    process.exit(1);
+  }
 }
 
 main().catch(console.error);
