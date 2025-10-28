@@ -1,165 +1,165 @@
 # VoltChain Energy Platform
 
-Plataforma completa para monitoramento e gestão de energia renovável com integração blockchain.
+A full-stack platform for monitoring and managing renewable energy with blockchain integration.
 
-## 🏗️ Arquitetura do Monorepo
+## Monorepo Architecture
 
 ```
 voltchain-platform/
-├── backend/          # API REST MVP (Node.js + TypeScript)
-├── onchain/          # Programa Solana (Anchor Framework)
-├── frontend/         # Interface Web (React + Next.js)
-└── iot/             # Dispositivos IoT (ESP32 + Arduino)
+├── backend/          # REST API MVP (Node.js + TypeScript)
+├── onchain/          # Solana program (Anchor Framework)
+├── frontend/         # Web interface (React + Next.js)
+└── iot/              # IoT devices (ESP32 + Arduino)
 ```
 
-## 🚀 Status do Projeto
+## Project Status
 
-| Componente | Status | Descrição |
-|------------|--------|-----------|
-| **Backend** | ✅ **Implementado** | API MVP com Express, Supabase e Solana |
-| **On-chain** | 🚧 **Planejado** | Programa Anchor para Solana |
-| **Frontend** | 🚧 **Planejado** | Interface React/Next.js |
-| **IoT** | 🚧 **Planejado** | Dispositivos ESP32/Arduino |
+| Component  | Status      | Description |
+|------------|-------------|-------------|
+| Backend    | Implemented | REST API MVP with Express, Supabase and Solana integration |
+| On-chain   | Planned     | Anchor program for Solana |
+| Frontend   | Planned     | React/Next.js interface |
+| IoT        | Planned     | ESP32/Arduino devices |
 
-## 🎯 Funcionalidades Implementadas
+## Implemented Features
 
 ### Backend MVP
-- ✅ **API REST** com Express e TypeScript
-- ✅ **Banco de Dados** Supabase (PostgreSQL)
-- ✅ **Autenticação HMAC** para dispositivos IoT
-- ✅ **Integração Solana** (opcional)
-- ✅ **Endpoints** para dispositivos, leituras e blockchain
-- ✅ **Logging** estruturado com Pino
+- REST API with Express and TypeScript
+- Supabase (PostgreSQL) for data storage
+- HMAC authentication for IoT devices
+- Optional Solana integration
+- Endpoints for devices, readings and blockchain
+- Structured logging with Pino
 
-### Endpoints Disponíveis
+### Available Endpoints
 - `GET /healthz` - Health check
-- `POST /v1/devices` - Criar dispositivo (admin)
-- `POST /v1/ingest` - Enviar leitura (HMAC)
-- `GET /v1/devices/:id/readings` - Listar leituras (admin)
-- `POST /v1/onchain/flush` - Sincronizar blockchain (admin)
+- `POST /v1/devices` - Create device (admin)
+- `POST /v1/ingest` - Ingest reading (HMAC)
+- `GET /v1/devices/:id/readings` - List readings (admin)
+- `POST /v1/onchain/flush` - Flush readings to blockchain (admin)
 
-## 🛠️ Tecnologias
+## Technologies
 
 ### Backend
-- **Node.js 20+** com TypeScript
-- **Express** para API REST
-- **Supabase** como banco de dados
-- **Solana Web3.js** para blockchain
-- **Pino** para logging
+- Node.js 20+ with TypeScript
+- Express for REST API
+- Supabase as database
+- Solana Web3.js for blockchain integration
+- Pino for logging
 
-### Planejado
-- **Anchor Framework** para programa Solana
-- **React 18+** com Next.js para frontend
-- **ESP32/Arduino** para dispositivos IoT
+### Planned
+- Anchor Framework for Solana program
+- React 18+ with Next.js for frontend
+- ESP32/Arduino for IoT devices
 
-## 🚀 Quick Start
+## Quick Start
 
-### 1. Backend (Implementado)
+### 1. Backend (implemented)
 
 ```bash
 cd backend
 npm install
-cp env.example .env
-# Configure as variáveis de ambiente
+cp .env.example .env
+# Configure environment variables in backend/.env
 npm run dev
 ```
 
-### 2. Banco de Dados
+### 2. Database
 
 ```bash
-# Execute a migration
+# Run migration
 supabase db push
-# ou
+# or
 psql -f backend/db/migrations/001_init.sql
 ```
 
-### 3. Teste da API
+### 3. API Test
 
 ```bash
 # Health check
 curl http://localhost:8080/healthz
 
-# Criar dispositivo
+# Create device (example)
 curl -X POST http://localhost:8080/v1/devices \
   -H "Authorization: Bearer dev-admin-token" \
   -H "Content-Type: application/json" \
-  -d '{"name": "Painel Solar 1"}'
+  -d '{"name": "Solar Panel 1"}'
 ```
 
-## 📋 Próximos Passos
+## Next Steps
 
 ### Backend
-- [ ] Implementar testes automatizados
-- [ ] Adicionar validação com Zod
-- [ ] Implementar rate limiting
-- [ ] Melhorar tratamento de erros
+- Add automated tests
+- Add validation (Zod)
+- Implement rate limiting
+- Improve error handling
 
 ### On-chain
-- [ ] Configurar ambiente Anchor
-- [ ] Implementar programa Solana
-- [ ] Criar IDL para integração
-- [ ] Deploy em devnet
+- Configure Anchor environment
+- Implement Solana program
+- Generate IDL for integration
+- Deploy to devnet
 
 ### Frontend
-- [ ] Configurar Next.js com TypeScript
-- [ ] Implementar dashboard principal
-- [ ] Integrar com backend API
-- [ ] Adicionar integração Solana
+- Setup Next.js with TypeScript
+- Implement main dashboard
+- Integrate with backend API
+- Add Solana integration
 
 ### IoT
-- [ ] Implementar código ESP32
-- [ ] Criar biblioteca de sensores
-- [ ] Implementar protocolo HMAC
-- [ ] Desenvolver interface de configuração
+- Implement ESP32 code
+- Create sensor library
+- Implement HMAC protocol
+- Develop device configuration interface
 
-## 🔧 Configuração
+## Configuration
 
-### Variáveis de Ambiente (Backend)
+### Environment variables (backend)
 
 ```env
-# Servidor
+# Server
 PORT=8080
 
-# Supabase (obrigatório)
-SUPABASE_URL=sua_url_do_supabase
-SUPABASE_SERVICE_ROLE_KEY=sua_chave_de_servico
+# Supabase (required)
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
-# Blockchain (opcional)
+# Blockchain (optional)
 ONCHAIN_ENABLED=false
 SOLANA_RPC_URL=https://api.devnet.solana.com
-SOLANA_PROGRAM_ID=SeuProgramId1111111111111111111111111111111
-SOLANA_WALLET_SECRET=[array JSON ou base58]
+SOLANA_PROGRAM_ID=YourProgramId1111111111111111111111111111111
+SOLANA_WALLET_SECRET=[JSON array or base58]
 
-# Admin (opcional)
+# Admin (optional)
 ADMIN_TOKEN=dev-admin-token
 ```
 
-## 📚 Documentação
+## Documentation
 
-- [Backend README](backend/README.md) - API e configuração
-- [On-chain README](onchain/README.md) - Programa Solana
-- [Frontend README](frontend/README.md) - Interface web
-- [IoT README](iot/README.md) - Dispositivos IoT
+- [Backend README](backend/README.md) - API and configuration
+- [On-chain README](onchain/README.md) - Solana program
+- [Frontend README](frontend/README.md) - Web interface
+- [IoT README](iot/README.md) - IoT devices
 
-## 🤝 Contribuição
+## Contributing
 
-1. Fork o repositório
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
-5. Abra um Pull Request
+1. Fork the repository
+2. Create a branch for your feature
+3. Commit your changes
+4. Push to your branch
+5. Open a Pull Request
 
-## 📄 Licença
+## License
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para detalhes.
+This project is licensed under MIT. See [LICENSE](LICENSE) for details.
 
-## 🆘 Suporte
+## Support
 
-Para dúvidas ou problemas:
-- Abra uma [issue](https://github.com/voltage/energy-platform/issues)
-- Consulte a documentação de cada componente
-- Verifique os logs do backend para debugging
+For questions or issues:
+- Open an [issue](https://github.com/voltage/energy-platform/issues)
+- Check component-specific documentation
+- Review backend logs for debugging
 
 ---
 
-**VoltChain** - Energia renovável na blockchain 🌱⚡
+VoltChain — Renewable energy on the blockchain

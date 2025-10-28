@@ -1,34 +1,34 @@
 # VoltChain IoT
 
-Implementações para dispositivos IoT que coletam dados de energia e enviam para a plataforma VoltChain.
+Implementations for IoT devices that collect energy data and send it to the VoltChain platform.
 
-## Status Atual
+## Status
 
-🚧 **Em desenvolvimento** - Esta pasta será implementada futuramente
+Under development — this folder will be implemented in the future.
 
-## Dispositivos Suportados
+## Supported Devices
 
-### ESP32 (Principal)
-- **Microcontrolador**: ESP32-S3 ou ESP32-C3
-- **Conectividade**: WiFi integrado
-- **Sensores**: Medidores de energia, tensão, corrente
-- **Protocolo**: HTTP POST com autenticação HMAC
+### ESP32 (Primary)
+- Microcontroller: ESP32-S3 or ESP32-C3
+- Connectivity: Built-in WiFi
+- Sensors: Energy, voltage, current meters
+- Protocol: HTTP POST with HMAC authentication
 
-### Outros Microcontroladores
-- **Arduino**: Com módulo WiFi
-- **Raspberry Pi**: Para protótipos avançados
-- **STM32**: Para aplicações industriais
+### Other Microcontrollers
+- Arduino with WiFi module
+- Raspberry Pi for advanced prototypes
+- STM32 for industrial applications
 
-## Protocolo de Comunicação
+## Communication Protocol
 
-### Autenticação HMAC
+### HMAC Authentication
 ```cpp
-// Exemplo de implementação em C++
+// Example C++ implementation
 String message = deviceId + "." + timestamp + "." + tsDevice + "." + energyKwh;
 String signature = hmacSha256(deviceSecret, message);
 ```
 
-### Headers HTTP
+### HTTP Headers
 ```cpp
 http.addHeader("x-device-id", deviceId);
 http.addHeader("x-timestamp", timestamp);
@@ -36,7 +36,7 @@ http.addHeader("x-signature", signature);
 http.addHeader("Content-Type", "application/json");
 ```
 
-### Payload JSON
+### JSON Payload
 ```json
 {
   "ts_device": "2024-01-01T12:00:00Z",
@@ -47,71 +47,71 @@ http.addHeader("Content-Type", "application/json");
 }
 ```
 
-## Estrutura Planejada
+## Planned Structure
 
 ```
 iot/
-├── esp32/                    # Código para ESP32
+├── esp32/                    # ESP32 code
 │   ├── src/
-│   │   ├── main.cpp         # Programa principal
-│   │   ├── sensors/         # Leitura de sensores
-│   │   ├── wifi/            # Configuração WiFi
-│   │   ├── crypto/          # Implementação HMAC
-│   │   └── api/             # Comunicação com backend
-│   ├── lib/                 # Bibliotecas externas
-│   ├── platformio.ini       # Configuração PlatformIO
+│   │   ├── main.cpp         # Main program
+│   │   ├── sensors/         # Sensor reading
+│   │   ├── wifi/            # WiFi configuration
+│   │   ├── crypto/          # HMAC implementation
+│   │   └── api/             # Backend communication
+│   ├── lib/                 # External libraries
+│   ├── platformio.ini       # PlatformIO config
 │   └── README.md
-├── arduino/                  # Código para Arduino
-├── raspberry-pi/            # Scripts Python para RPi
-├── stm32/                   # Código para STM32
-├── schematics/              # Diagramas elétricos
-├── 3d-models/               # Modelos para impressão 3D
-└── docs/                    # Documentação técnica
+├── arduino/                  # Arduino code
+├── raspberry-pi/            # Python scripts for RPi
+├── stm32/                   # STM32 code
+├── schematics/              # Electrical diagrams
+├── 3d-models/               # 3D print models
+└── docs/                    # Technical documentation
 ```
 
-## Sensores e Medições
+## Sensors and Measurements
 
-### Medidor de Energia
-- **ACS712**: Sensor de corrente AC
-- **ZMPT101B**: Transformador de tensão
-- **PZEM-004T**: Medidor de energia completo
+### Energy Meter
+- ACS712: AC current sensor
+- ZMPT101B: Voltage transformer
+- PZEM-004T: Complete energy meter
 
-### Parâmetros Medidos
-- **Energia Gerada**: kWh (kilowatt-hora)
-- **Tensão**: V (volts)
-- **Corrente**: A (amperes)
-- **Frequência**: Hz (hertz)
+### Measured Parameters
+- Energy generated: kWh (kilowatt-hour)
+- Voltage: V (volts)
+- Current: A (amperes)
+- Frequency: Hz (hertz)
 
-### Calibração
-- Fatores de correção para cada sensor
-- Validação de leituras
-- Filtros para ruído elétrico
+### Calibration
+- Correction factors per sensor
+- Reading validation
+- Filters for electrical noise
 
-## Configuração de Dispositivos
+## Device Configuration
 
 ### WiFi
 ```cpp
-// Configuração via web interface
-const char* ssid = "Sua_Rede_WiFi";
-const char* password = "sua_senha";
+// Example web interface configuration
+const char* ssid = "Your_WiFi_Network";
+const char* password = "your_password";
 ```
 
 ### Backend
 ```cpp
-// Endpoint do backend
+// Backend endpoint
 const char* serverUrl = "http://localhost:8080/v1/ingest";
 ```
 
-### Credenciais
+### Credentials
 ```cpp
-// Device ID e secret (gerados no backend)
-const char* deviceId = "uuid-do-dispositivo";
-const char* deviceSecret = "chave-secreta-base64";
+// Device ID and secret (generated by backend)
+const char* deviceId = "device-uuid";
+const char* deviceSecret = "base64-secret-key";
 ```
 
-## Exemplo de Código ESP32
+## ESP32 Example Code
 
-### Estrutura Básica
+### Basic Structure
 ```cpp
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -128,11 +128,11 @@ void loop() {
     EnergyReading reading = readEnergyData();
     sendToBackend(reading);
   }
-  delay(30000); // Enviar a cada 30 segundos
+  delay(30000); // Send every 30 seconds
 }
 ```
 
-### Leitura de Sensores
+### Sensor Reading
 ```cpp
 EnergyReading readEnergyData() {
   EnergyReading reading;
@@ -145,39 +145,39 @@ EnergyReading readEnergyData() {
 }
 ```
 
-## Segurança
+## Security
 
-### Autenticação
-- **HMAC-SHA256**: Assinatura de todas as mensagens
-- **Timestamp**: Validação de janela temporal (30s)
-- **Device Secret**: Chave única por dispositivo
+### Authentication
+- HMAC-SHA256: Sign all messages
+- Timestamp: Validate within a 30s window
+- Device secret: Unique per device
 
-### Proteção de Dados
-- **TLS/HTTPS**: Comunicação criptografada
-- **Validação**: Verificação de integridade
-- **Rate Limiting**: Controle de frequência de envio
+### Data Protection
+- TLS/HTTPS: Encrypted communication
+- Validation: Integrity checks
+- Rate limiting: Control send frequency
 
-## Monitoramento e Debug
+## Monitoring and Debug
 
 ### Logs
-- Serial output para debug
-- LED status para indicadores visuais
-- Web interface para configuração
+- Serial output for debugging
+- LED status for visual indicators
+- Web interface for configuration
 
-### Telemetria
-- Status de conexão
-- Qualidade do sinal WiFi
-- Erros de comunicação
-- Estatísticas de envio
+### Telemetry
+- Connection status
+- WiFi signal quality
+- Communication errors
+- Sending statistics
 
-## Próximos Passos
+## Next Steps
 
-1. [ ] Implementar código base para ESP32
-2. [ ] Criar biblioteca de sensores
-3. [ ] Implementar protocolo HMAC
-4. [ ] Desenvolver interface de configuração
-5. [ ] Criar documentação de hardware
-6. [ ] Implementar OTA updates
-7. [ ] Adicionar suporte a outros microcontroladores
-8. [ ] Criar testes automatizados
-9. [ ] Desenvolver ferramentas de calibração
+1. Implement base code for ESP32
+2. Create sensor library
+3. Implement HMAC protocol
+4. Develop configuration interface
+5. Create hardware documentation
+6. Implement OTA updates
+7. Add support for other microcontrollers
+8. Create automated tests
+9. Develop calibration tools

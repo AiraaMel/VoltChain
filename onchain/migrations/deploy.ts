@@ -1,13 +1,13 @@
 import "dotenv/config";
 
 import { chdir, cwd } from "process";
-console.log("🚀 Starting VoltChain migration...");
-console.log("📂 Current working directory:", cwd());
+console.log("Starting VoltChain migration...");
+console.log("Current working directory:", cwd());
 
-// garante que o diretório atual seja /onchain (onde o Anchor.toml está)
+// Ensure current working directory is /onchain (where Anchor.toml is)
 if (!cwd().endsWith("/onchain")) {
   chdir(__dirname + "/..");
-  console.log("✅ Changed working directory to:", cwd());
+  console.log("Changed working directory to:", cwd());
 }
 
 
@@ -22,7 +22,7 @@ anchor.setProvider(provider);
 const program = anchor.workspace.Voltchain as Program<Voltchain>;
 
 async function main() {
-  console.log("🚀 Deploying VoltChain Energy Platform...");
+  console.log("Deploying VoltChain Energy Platform...");
   console.log(`Program ID: ${program.programId.toString()}`);
   console.log(`Cluster: ${provider.connection.rpcEndpoint}`);
 
@@ -36,7 +36,7 @@ async function main() {
   console.log(`Pool PDA: ${poolPda.toString()}`);
 
   try {
-    console.log("Initializing pool...");
+  console.log("Initializing pool...");
 
     // Placeholder mint (replace with real mint later if needed)
     const voltchainMint = new PublicKey("11111111111111111111111111111111");
@@ -50,23 +50,22 @@ async function main() {
       })
       .rpc();
 
-    console.log(`✅ Pool initialized: ${tx}`);
+  console.log(`Pool initialized: ${tx}`);
 
     const poolAccount = await program.account.pool.fetch(poolPda);
-    console.log("\n📊 Pool state:");
+    console.log("\nPool state:");
     console.log(`Authority: ${poolAccount.authority.toString()}`);
     console.log(`VoltChain Mint: ${poolAccount.voltchainMint.toString()}`);
     console.log(`Total kWh: ${poolAccount.totalKwh.toString()} microkWh`);
     console.log(`Period: ${poolAccount.period.toString()}`);
-
-    console.log("\n✅ VoltChain Energy Platform deployed successfully!");
+    console.log("\nVoltChain Energy Platform deployed successfully!");
     console.log("\nNext steps:");
-    console.log("1️⃣ Run 'yarn run:simulate' to start IoT simulation");
-    console.log("2️⃣ Run 'yarn run:listener' to monitor events");
-    console.log("3️⃣ Run 'yarn run:settlement' to process sales");
-    console.log("4️⃣ Run 'yarn test' to run the test suite");
+    console.log("Run 'yarn run:simulate' to start IoT simulation");
+    console.log("Run 'yarn run:listener' to monitor events");
+    console.log("Run 'yarn run:settlement' to process sales");
+    console.log("Run 'yarn test' to run the test suite");
   } catch (error) {
-    console.error("❌ Deployment failed:", error);
+    console.error("Deployment failed:", error);
     process.exit(1);
   }
 }

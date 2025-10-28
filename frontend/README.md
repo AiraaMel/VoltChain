@@ -1,103 +1,103 @@
 # VoltChain Frontend
 
-Interface web para a plataforma VoltChain.
+Web interface for the VoltChain platform.
 
-## Status Atual
+## Status
 
-🚧 **Em desenvolvimento** - Esta pasta será implementada futuramente
+Under development — this folder will be implemented in the future.
 
-## Tecnologias Planejadas
+## Planned Technologies
 
-### Stack Principal
-- **React 18+** com TypeScript
-- **Next.js 14+** para SSR/SSG
-- **Tailwind CSS** para estilização
-- **Shadcn/ui** para componentes
+### Core Stack
+- React 18+ with TypeScript
+- Next.js for SSR/SSG
+- Tailwind CSS for styling
+- Shadcn/ui for components
 
-### Integração
-- **@solana/wallet-adapter** para carteiras
-- **@supabase/supabase-js** para dados
-- **Chart.js** ou **Recharts** para gráficos
-- **React Query** para cache de dados
+### Integrations
+- @solana/wallet-adapter for wallets
+- @supabase/supabase-js for data
+- Chart.js or Recharts for charts
+- React Query for data caching
 
-## Funcionalidades Planejadas
+## Planned Features
 
-### Dashboard Principal
-- **Visão Geral**: Estatísticas de energia gerada
-- **Gráficos**: Consumo e geração ao longo do tempo
-- **Mapa**: Localização dos dispositivos
-- **Status**: Estado dos dispositivos conectados
+### Main Dashboard
+- Overview: energy generation statistics
+- Charts: consumption and generation over time
+- Map: device locations
+- Status: connected device state
 
-### Gestão de Dispositivos
-- **Cadastro**: Adicionar novos dispositivos
-- **Configuração**: Parâmetros e localização
-- **Monitoramento**: Status em tempo real
-- **Histórico**: Leituras e eventos
+### Device Management
+- Register: add new devices
+- Configuration: parameters and location
+- Monitoring: real-time status
+- History: readings and events
 
 ### Blockchain Integration
-- **Carteira**: Conectar carteira Solana
-- **Transações**: Visualizar transações on-chain
-- **Recompensas**: Tokens ganhos por geração
-- **Governança**: Participar em votações
+- Wallet: connect Solana wallet
+- Transactions: view on-chain transactions
+- Rewards: tokens earned by generation
+- Governance: participate in votes
 
-### Perfil do Usuário
-- **Configurações**: Preferências e notificações
-- **Relatórios**: Exportar dados
-- **API Keys**: Gerenciar chaves de acesso
-- **Histórico**: Atividade e transações
+### User Profile
+- Settings: preferences and notifications
+- Reports: export data
+- API Keys: manage access keys
+- History: activity and transactions
 
-## Estrutura Planejada
+## Planned Structure
 
 ```
 frontend/
 ├── src/
-│   ├── components/      # Componentes reutilizáveis
-│   ├── pages/          # Páginas da aplicação
-│   ├── hooks/          # Custom hooks
-│   ├── services/       # API e integrações
-│   ├── utils/          # Utilitários
-│   └── styles/         # Estilos globais
-├── public/             # Assets estáticos
-├── next.config.js      # Configuração Next.js
-├── tailwind.config.js  # Configuração Tailwind
+│   ├── components/      # Reusable components
+│   ├── pages/           # Application pages
+│   ├── hooks/           # Custom hooks
+│   ├── services/        # API and integrations
+│   ├── utils/           # Utilities
+│   └── styles/          # Global styles
+├── public/              # Static assets
+├── next.config.js       # Next.js config
+├── tailwind.config.js   # Tailwind config
 └── package.json
 ```
 
 ## Design System
 
-### Cores
-- **Primária**: Verde energia (#10B981)
-- **Secundária**: Azul tecnologia (#3B82F6)
-- **Neutras**: Cinza escala (#F9FAFB → #111827)
+### Colors
+- Primary: Energy green (#10B981)
+- Secondary: Tech blue (#3B82F6)
+- Neutrals: Gray scale (#F9FAFB → #111827)
 
-### Componentes
-- Cards de estatísticas
-- Gráficos interativos
-- Tabelas de dados
-- Formulários responsivos
-- Modais e notificações
+### Components
+- Statistic cards
+- Interactive charts
+- Data tables
+- Responsive forms
+- Modals and notifications
 
-## Integração com Backend
+## Backend Integration
 
 ### API Endpoints
-- `GET /healthz` - Status do sistema
-- `POST /v1/devices` - Gerenciar dispositivos
-- `GET /v1/devices/:id/readings` - Leituras
-- `POST /v1/onchain/flush` - Sincronizar blockchain
+- `GET /healthz` - System status
+- `POST /v1/devices` - Manage devices
+- `GET /v1/devices/:id/readings` - Readings
+- `POST /v1/onchain/flush` - Sync to blockchain
 
-### Autenticação
-- **Admin Token**: Para operações administrativas
-- **HMAC**: Para dispositivos IoT
-- **Wallet**: Para operações blockchain
+### Authentication
+- Admin Token for administrative operations
+- HMAC for IoT devices
+- Wallet for blockchain operations
 
-## Próximos Passos
+## Next Steps
 
-1. [ ] Configurar Next.js com TypeScript
-2. [ ] Implementar design system
-3. [ ] Criar componentes base
-4. [ ] Integrar com backend API
-5. [ ] Implementar dashboard principal
-6. [ ] Adicionar integração Solana
-7. [ ] Implementar responsividade
-8. [ ] Adicionar testes
-9. [ ] Deploy e CI/CD
+1. Configure Next.js with TypeScript
+2. Implement design system
+3. Create base components
+4. Integrate with backend API
+5. Implement main dashboard
+6. Add Solana integration
+7. Implement responsiveness
+8. Add tests
+9. Setup CI/CD and deployment
