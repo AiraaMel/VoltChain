@@ -7,6 +7,8 @@
     "build": "anchor build",
     "test": "anchor test",
     "deploy": "anchor deploy",
+    "devnet": "./setup-devnet.sh",
+    "devnet:stop": "./stop-devnet.sh",
     "run:migrate": "ts-node onchain/migrations/deploy.ts",
     "run:simulate": "ts-node scripts/simulate_iot.ts",
     "run:listener": "ts-node scripts/listener.ts",
