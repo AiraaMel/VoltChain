@@ -74,25 +74,25 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   <MetricCard
                     title="Total Energy Produced"
-                    value={`${data.totalEnergy.toLocaleString()} kWh`}
+                    value={`${(data.totalEnergy || 0).toLocaleString()} kWh`}
                     change={{ value: "+12.5%", isPositive: true }}
                     icon={<Zap className="h-5 w-5" />}
                   />
                   <MetricCard
                     title="Average Price"
-                    value={`$${data.averagePrice.toFixed(2)} per kWh`}
+                    value={`$${(data.averagePrice || 0).toFixed(2)} per kWh`}
                     change={{ value: "+3.2%", isPositive: true }}
                     icon={<DollarSign className="h-5 w-5" />}
                   />
                   <MetricCard
                     title="Total Earnings"
-                    value={`$${data.totalEarnings.toLocaleString()}`}
+                    value={`$${(data.totalEarnings || 0).toLocaleString()}`}
                     change={{ value: "+8.7%", isPositive: true }}
                     icon={<TrendingUp className="h-5 w-5" />}
                   />
                   <MetricCard
                     title="Active Devices"
-                    value={`${data.activeDevices} IoT devices connected`}
+                    value={`${data.activeDevices || 0} IoT devices connected`}
                     icon={<Settings className="h-5 w-5" />}
                   />
                 </div>
@@ -101,12 +101,12 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                   {/* Energy Production Overview */}
                   <div className="lg:col-span-2">
-                    <OverviewChart data={data.monthlyData} />
+                    <OverviewChart data={data.monthlyData || []} />
                   </div>
                   
                   {/* Claim Card */}
                   <div className="lg:col-span-1">
-                    <ClaimCard amount={data.availableToClaim} />
+                    <ClaimCard amount={data.availableToClaim || 0} />
                   </div>
                 </div>
               </>

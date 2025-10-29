@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation"
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: Home },
-  { name: "Energy Production", href: "/energy", icon: Zap },
+  { name: "Energy Production", href: "/production", icon: Zap },
   { name: "Sales & Pricing", href: "/sales", icon: TrendingUp },
   { name: "Wallet & Earnings", href: "/wallet", icon: Wallet },
   { name: "IoT Devices", href: "/devices", icon: Settings },

@@ -10,11 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Bell, Moon, Sun, User } from "lucide-react"
+import { Bell, Moon, Sun, User, ChevronRight } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useState } from "react"
 
-export function Topbar() {
+interface TopbarProps {
+  title?: string
+  breadcrumb?: Array<{ label: string; href?: string }>
+}
+
+export function Topbar({ title = "Home", breadcrumb }: TopbarProps) {
   const { theme, setTheme } = useTheme()
   const [notifications] = useState(3) // Mock notification count
 
@@ -22,9 +27,31 @@ export function Topbar() {
     <div className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
       {/* Left side */}
       <div className="flex items-center">
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-          Home
-        </h1>
+        {breadcrumb ? (
+          <div className="flex items-center space-x-2">
+            {breadcrumb.map((item, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                {index > 0 && <ChevronRight className="h-4 w-4 text-gray-400" />}
+                {item.href ? (
+                  <a 
+                    href={item.href}
+                    className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    {item.label}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+            {title}
+          </h1>
+        )}
       </div>
 
       {/* Right side */}

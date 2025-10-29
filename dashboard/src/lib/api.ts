@@ -52,40 +52,58 @@ class ApiService {
 
   // Get dashboard data
   async getDashboardData(): Promise<ApiResponse<EnergyData>> {
-    // For now, return mock data since backend might not have this endpoint yet
-    const mockData: EnergyData = {
-      totalEnergy: 5234,
-      averagePrice: 0.38,
-      totalEarnings: 1989.20,
-      activeDevices: 3,
-      monthlyData: [
-        { month: "Jan", value: 400 },
-        { month: "Feb", value: 300 },
-        { month: "Mar", value: 500 },
-        { month: "Apr", value: 450 },
-        { month: "May", value: 600 },
-        { month: "Jun", value: 550 },
-        { month: "Jul", value: 700 },
-        { month: "Aug", value: 650 },
-        { month: "Sep", value: 800 },
-        { month: "Oct", value: 750 },
-        { month: "Nov", value: 900 },
-        { month: "Dec", value: 850 },
-      ],
-      availableToClaim: 1247.85,
-    };
-
-    return { data: mockData, success: true };
+    return this.request('/v1/dashboard');
   }
 
-  // Get devices
+  // Get devices (mock data for now since there's no GET /devices endpoint)
   async getDevices(): Promise<ApiResponse<any[]>> {
-    return this.request('/devices');
+    // Mock data since backend only has POST /v1/devices
+    const mockDevices = [
+      {
+        id: 1,
+        name: "Solar Panel Array A",
+        location: "Rooftop – North",
+        active: true,
+        energy_generated: 2500
+      },
+      {
+        id: 2,
+        name: "Solar Panel Array B", 
+        location: "Rooftop – South",
+        active: true,
+        energy_generated: 2300
+      },
+      {
+        id: 3,
+        name: "Wind Turbine Unit 1",
+        location: "Ground Level",
+        active: true,
+        energy_generated: 1500
+      }
+    ];
+    
+    return { data: mockDevices, success: true };
   }
 
-  // Get readings
+  // Get readings (mock data for now)
   async getReadings(): Promise<ApiResponse<any[]>> {
-    return this.request('/readings');
+    // Mock data since backend only has GET /v1/devices/:id/readings
+    const mockReadings = [
+      {
+        id: 1,
+        device_id: 1,
+        energy_generated_kwh: 25.5,
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        device_id: 2,
+        energy_generated_kwh: 23.2,
+        created_at: new Date().toISOString()
+      }
+    ];
+    
+    return { data: mockReadings, success: true };
   }
 }
 
