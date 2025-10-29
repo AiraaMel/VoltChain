@@ -10,6 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { WalletConnectDialog } from "@/components/ui/wallet-connect-dialog"
+import { NotificationsPanel } from "@/components/ui/notifications-panel"
 import { Bell, Moon, Sun, User, ChevronRight } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useState } from "react"
@@ -22,6 +24,8 @@ interface TopbarProps {
 export function Topbar({ title = "Home", breadcrumb }: TopbarProps) {
   const { theme, setTheme } = useTheme()
   const [notifications] = useState(3) // Mock notification count
+  const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false)
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
 
   return (
     <div className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
@@ -57,12 +61,20 @@ export function Topbar({ title = "Home", breadcrumb }: TopbarProps) {
       {/* Right side */}
       <div className="flex items-center space-x-4">
         {/* Select Wallet Button */}
-        <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+        <Button 
+          onClick={() => setIsWalletDialogOpen(true)}
+          className="bg-purple-600 hover:bg-purple-700 text-white"
+        >
           Select Wallet
         </Button>
 
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="relative"
+          onClick={() => setIsNotificationsOpen(true)}
+        >
           <Bell className="h-5 w-5" />
           {notifications > 0 && (
             <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-xs text-white flex items-center justify-center">
@@ -111,6 +123,18 @@ export function Topbar({ title = "Home", breadcrumb }: TopbarProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* Wallet Connect Dialog */}
+      <WalletConnectDialog 
+        open={isWalletDialogOpen} 
+        onOpenChange={setIsWalletDialogOpen} 
+      />
+
+      {/* Notifications Panel */}
+      <NotificationsPanel 
+        open={isNotificationsOpen} 
+        onOpenChange={setIsNotificationsOpen} 
+      />
     </div>
   )
 }

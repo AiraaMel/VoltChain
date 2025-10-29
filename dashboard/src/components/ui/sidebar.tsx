@@ -17,7 +17,7 @@ const navigation = [
   { name: "Energy Production", href: "/production", icon: Zap },
   { name: "Sales & Pricing", href: "/sales", icon: TrendingUp },
   { name: "Wallet & Earnings", href: "/wallet", icon: Wallet },
-  { name: "IoT Devices", href: "/devices", icon: Settings },
+  { name: "IoT Devices", href: "/iot", icon: Settings },
 ]
 
 export function Sidebar() {
