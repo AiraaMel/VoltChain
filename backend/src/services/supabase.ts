@@ -1,19 +1,57 @@
 import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+
+// Load environment variables first
+dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error('Missing Supabase configuration. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY');
-}
+// Debug para verificar se as variáveis estão sendo carregadas
+console.log('🔍 Debug - SUPABASE_URL:', supabaseUrl ? 'SET' : 'NOT SET');
+console.log('🔍 Debug - SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? 'SET' : 'NOT SET');
 
-// Create Supabase admin client with service role key
-export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  }
-});
+// Modo mock se não houver configuração
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.log('🔧 Running in MOCK MODE - No Supabase required');
+  
+  export const supabase = {
+    from: (table: string) => ({
+      insert: (data: any) => ({
+        select: () => ({
+          single: () => Promise.resolve({
+            data: { 
+              id: `mock-${Date.now()}`, 
+              ...data, 
+              created_at: new Date().toISOString() 
+            },
+            error: null
+          })
+        })
+      }),
+      select: () => ({
+        eq: () => ({
+          order: () => Promise.resolve({ data: [], error: null })
+        }),
+        order: () => Promise.resolve({ data: [], error: null })
+      }),
+      update: () => ({
+        eq: () => ({
+          select: () => Promise.resolve({ data: [], error: null })
+        })
+      })
+    })
+  };
+} else {
+  // Modo real com Supabase
+  console.log('✅ Using real Supabase connection');
+  export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  });
+}
 
 export interface Device {
   id: string;
