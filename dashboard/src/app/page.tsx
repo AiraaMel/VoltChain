@@ -4,7 +4,6 @@ import { Sidebar } from "@/components/ui/sidebar"
 import { Topbar } from "@/components/ui/topbar"
 import { MetricCard } from "@/components/ui/metric-card"
 import { OverviewChart } from "@/components/ui/overview-chart"
-import { ClaimCard } from "@/components/ui/claim-card"
 import { useDashboardData } from "@/hooks/useDashboardData"
 import { 
   Zap, 
@@ -18,7 +17,7 @@ import {
 export default function Dashboard() {
   const { data, loading, error, backendConnected } = useDashboardData()
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-screen bg-background">
       {/* Sidebar */}
       <Sidebar />
       
@@ -33,7 +32,7 @@ export default function Dashboard() {
             {/* Header */}
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                <h1 className="text-3xl font-bold text-foreground">
                   Dashboard
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400">
@@ -60,7 +59,7 @@ export default function Dashboard() {
             {loading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="text-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
                   <p className="mt-4 text-gray-600 dark:text-gray-400">Loading dashboard data...</p>
                 </div>
               </div>
@@ -97,16 +96,11 @@ export default function Dashboard() {
                   />
                 </div>
 
-                {/* Charts and Claim Card */}
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                {/* Charts */}
+                <div className="grid grid-cols-1 gap-6">
                   {/* Energy Production Overview */}
-                  <div className="lg:col-span-2">
+                  <div>
                     <OverviewChart data={data.monthlyData || []} />
-                  </div>
-                  
-                  {/* Claim Card */}
-                  <div className="lg:col-span-1">
-                    <ClaimCard amount={data.availableToClaim || 0} />
                   </div>
                 </div>
               </>

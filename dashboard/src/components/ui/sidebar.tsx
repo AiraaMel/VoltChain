@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: Home },
@@ -24,14 +25,21 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="flex h-full w-64 flex-col bg-white border-r border-gray-200 dark:bg-gray-900 dark:border-gray-800">
+    <div className="flex h-full w-64 flex-col bg-card border-r border-border">
       {/* Logo */}
-      <div className="flex h-16 shrink-0 items-center px-6 border-b border-gray-200 dark:border-gray-800">
-        <div className="flex items-center space-x-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-600">
-            <Zap className="h-5 w-5 text-white" />
+      <div className="flex h-16 shrink-0 items-center px-6 border-b border-border">
+        <div className="flex items-center space-x-3">
+          {/* VoltChain Logo - New Brand Identity (SVG preferred to match PNG appearance) */}
+          <div className="flex h-8 w-8 items-center justify-center">
+            <Image 
+              src="/voltchain-logo.svg" 
+              alt="VoltChain Logo" 
+              width={32} 
+              height={32}
+              className="h-8 w-8"
+            />
           </div>
-          <span className="text-xl font-bold text-gray-900 dark:text-white">
+          <span className="text-xl font-bold text-foreground">
             VoltChain
           </span>
         </div>
@@ -48,7 +56,7 @@ export function Sidebar() {
                 className={cn(
                   "w-full justify-start h-12 px-4",
                   isActive
-                    ? "bg-purple-600 text-white hover:bg-purple-700"
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
                     : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                 )}
               >

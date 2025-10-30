@@ -40,7 +40,7 @@ npm start
 ## 🎨 Componentes
 
 ### Estrutura Principal
-- `Sidebar` - Navegação lateral com logo VoltChain
+- `Sidebar` - Navegação lateral com nova logo VoltChain (gradiente verde)
 - `Topbar` - Barra superior com controles e avatar
 - `MetricCard` - Cards de métricas com variações
 - `OverviewChart` - Gráfico de produção de energia
@@ -69,7 +69,8 @@ npm start
 
 O projeto está configurado com:
 - Tema padrão: claro
-- Cores: Purple (#8b5cf6) como cor primária
+- Cores: Paleta oficial VoltChain (#043915, #4C763B, #B0CE88, #FFFD8F)
+- Logo: Nova identidade visual com gradiente verde
 - Responsividade: Desktop e tablet
 - Dados: Mockados para demonstração
 
@@ -89,7 +90,8 @@ O projeto está configurado com:
 
 ## 🎨 Design System
 
-- **Cores**: Tons de cinza e roxo
+- **Cores**: Paleta oficial VoltChain (verde escuro, médio, claro e amarelo)
+- **Logo**: Nova identidade visual com gradiente verde e amarelo
 - **Tipografia**: Inter (Google Fonts)
 - **Bordas**: rounded-2xl para cards
 - **Sombras**: Leves e sutis

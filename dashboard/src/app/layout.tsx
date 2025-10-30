@@ -2,13 +2,19 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { WalletProviderWrapper } from "@/components/wallet-provider";
+import { SolanaProvider } from "@/components/SolanaProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "VoltChain Dashboard",
   description: "Monitor your energy production and earnings",
+  icons: {
+    // Use the official VoltChain SVG logo as favicon
+    icon: "/voltchain-logo.svg",
+    shortcut: "/voltchain-logo.svg",
+    apple: "/voltchain-logo.svg",
+  },
 };
 
 export default function RootLayout({
@@ -25,9 +31,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <WalletProviderWrapper>
+          <SolanaProvider>
             {children}
-          </WalletProviderWrapper>
+          </SolanaProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -44,7 +44,7 @@ export function WalletConnectDialog({ open, onOpenChange }: WalletConnectDialogP
             onClick={() => handleWalletSelect("Phantom")}
             className="flex items-center gap-3 bg-white/10 hover:bg-white/20 text-white p-3 rounded-xl w-full h-auto"
           >
-            <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+            <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
               <span className="text-white text-xs font-bold">P</span>
             </div>
             <span className="font-medium">Phantom</span>

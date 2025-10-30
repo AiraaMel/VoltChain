@@ -39,9 +39,9 @@ export default function WalletPage() {
             {/* Wallet Connection and Claim Section */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               {/* Wallet Connection */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
+              {/* <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
                 <WalletConnectionCard />
-              </div>
+              </div> */}
               
               {/* Claim Card */}
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
