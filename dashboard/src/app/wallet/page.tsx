@@ -6,6 +6,7 @@ import { WalletConnectionCard } from "@/components/wallet/wallet-connection-card
 import { ClaimCard } from "@/components/wallet/claim-card"
 import { EarningsTabs } from "@/components/wallet/earnings-tabs"
 import { TransactionList } from "@/components/wallet/transaction-list"
+import { AnchorTestPanelEnhanced as AnchorTestPanel } from "@/components/wallet/anchor-test-panel-enhanced"
 
 export default function WalletPage() {
   return (
@@ -57,6 +58,11 @@ export default function WalletPage() {
             {/* Transaction History */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
               <TransactionList />
+            </div>
+
+            {/* Anchor Integration Test Panel */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
+              <AnchorTestPanel />
             </div>
           </div>
         </main>
