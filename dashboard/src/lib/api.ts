@@ -26,6 +26,8 @@ class ApiService {
           'Content-Type': 'application/json',
           ...options?.headers,
         },
+        // Evita respostas 304 com corpo vazio em dev (Next/Turbopack cache)
+        cache: 'no-store',
         ...options,
       });
 
@@ -33,8 +35,10 @@ class ApiService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      return { data, success: true };
+      const raw = await response.json();
+      // O backend responde no formato { success, data }. Descompactamos aqui
+      const payload = (raw && typeof raw === 'object' && 'data' in raw) ? (raw as any).data : raw;
+      return { data: payload as T, success: true };
     } catch (error) {
       console.error('API Error:', error);
       return {
