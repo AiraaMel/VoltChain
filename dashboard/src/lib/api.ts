@@ -55,55 +55,44 @@ class ApiService {
     return this.request('/v1/dashboard');
   }
 
-  // Get devices (mock data for now since there's no GET /devices endpoint)
+  // Get devices (calls backend; no more mock)
   async getDevices(): Promise<ApiResponse<any[]>> {
-    // Mock data since backend only has POST /v1/devices
-    const mockDevices = [
-      {
-        id: 1,
-        name: "Solar Panel Array A",
-        location: "Rooftop – North",
-        active: true,
-        energy_generated: 2500
-      },
-      {
-        id: 2,
-        name: "Solar Panel Array B", 
-        location: "Rooftop – South",
-        active: true,
-        energy_generated: 2300
-      },
-      {
-        id: 3,
-        name: "Wind Turbine Unit 1",
-        location: "Ground Level",
-        active: true,
-        energy_generated: 1500
+    try {
+      const adminToken = process.env.NEXT_PUBLIC_ADMIN_TOKEN;
+      const res = await fetch(`${API_BASE_URL}/v1/devices`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(adminToken ? { Authorization: `Bearer ${adminToken}` } : {})
+        }
+      });
+      if (res.ok) {
+        const json = await res.json();
+        return { data: json.devices || [], success: true };
       }
-    ];
-    
-    return { data: mockDevices, success: true };
+      throw new Error(`HTTP ${res.status}`);
+    } catch (e) {
+      return { data: [], success: false, error: e instanceof Error ? e.message : 'Unknown error' };
+    }
   }
 
-  // Get readings (mock data for now)
-  async getReadings(): Promise<ApiResponse<any[]>> {
-    // Mock data since backend only has GET /v1/devices/:id/readings
-    const mockReadings = [
-      {
-        id: 1,
-        device_id: 1,
-        energy_generated_kwh: 25.5,
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 2,
-        device_id: 2,
-        energy_generated_kwh: 23.2,
-        created_at: new Date().toISOString()
+  // Get readings for a device (calls backend; no more mock)
+  async getReadings(deviceId: string, limit = 100): Promise<ApiResponse<any[]>> {
+    try {
+      const adminToken = process.env.NEXT_PUBLIC_ADMIN_TOKEN;
+      const res = await fetch(`${API_BASE_URL}/v1/devices/${deviceId}/readings?limit=${limit}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(adminToken ? { Authorization: `Bearer ${adminToken}` } : {})
+        }
+      });
+      if (res.ok) {
+        const json = await res.json();
+        return { data: json.readings || [], success: true };
       }
-    ];
-    
-    return { data: mockReadings, success: true };
+      throw new Error(`HTTP ${res.status}`);
+    } catch (e) {
+      return { data: [], success: false, error: e instanceof Error ? e.message : 'Unknown error' };
+    }
   }
 }
 

@@ -14,6 +14,7 @@ router.get('/v1/dashboard', async (req: Request, res: Response) => {
     // Tentar buscar dados reais do Supabase
     let devices = [];
     let readings = [];
+    let transactions = [];
     
     try {
       const { data: devicesData } = await supabase
@@ -28,6 +29,13 @@ router.get('/v1/dashboard', async (req: Request, res: Response) => {
         .order('created_at', { ascending: false })
         .limit(100);
       readings = readingsData || [];
+
+      const { data: txData } = await supabase
+        .from('transactions')
+        .select('id, user_id, device_id, type, amount, token, metadata, created_at, updated_at')
+        .order('created_at', { ascending: false })
+        .limit(20);
+      transactions = txData || [];
     } catch (dbError) {
       console.log('⚠️ Database error, using mock data:', dbError);
     }
@@ -61,6 +69,7 @@ router.get('/v1/dashboard', async (req: Request, res: Response) => {
       activeDevices,
       monthlyData,
       availableToClaim: 1247.85,
+      transactions,
     };
 
     console.log('📊 Dashboard data:', dashboardData);

@@ -5,27 +5,22 @@ import { Topbar } from "@/components/ui/topbar"
 import { MetricCard } from "@/components/ui/metric-card"
 import { OverviewChart } from "@/components/ui/overview-chart"
 import { useDashboardData } from "@/hooks/useDashboardData"
-import { 
-  Zap, 
-  DollarSign, 
-  TrendingUp, 
-  Settings,
-  Wifi,
-  WifiOff
+import {
+  Zap, DollarSign, TrendingUp, Settings, Wifi, WifiOff
 } from "lucide-react"
+import { SeedDevData } from '@/components/SeedDevData'
 
 export default function Dashboard() {
   const { data, loading, error, backendConnected } = useDashboardData()
   return (
     <div className="flex h-screen bg-background">
+      <SeedDevData />
       {/* Sidebar */}
       <Sidebar />
-      
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Topbar */}
         <Topbar />
-        
         {/* Dashboard Content */}
         <main className="flex-1 overflow-y-auto p-6">
           <div className="space-y-6">
@@ -39,7 +34,6 @@ export default function Dashboard() {
                   Monitor your energy production and earnings
                 </p>
               </div>
-              
               {/* Backend Status */}
               <div className="flex items-center space-x-2">
                 {backendConnected ? (
@@ -55,7 +49,6 @@ export default function Dashboard() {
                 )}
               </div>
             </div>
-
             {loading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="text-center">
@@ -95,7 +88,6 @@ export default function Dashboard() {
                     icon={<Settings className="h-5 w-5" />}
                   />
                 </div>
-
                 {/* Charts */}
                 <div className="grid grid-cols-1 gap-6">
                   {/* Energy Production Overview */}

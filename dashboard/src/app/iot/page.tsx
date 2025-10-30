@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Sidebar } from "@/components/ui/sidebar"
 import { Topbar } from "@/components/ui/topbar"
 import { MetricCard } from "@/components/ui/metric-card"
@@ -15,9 +15,27 @@ import {
   Plus
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { apiService } from '@/lib/api'
 
 export default function IoTDevicesPage() {
   const [isAddDeviceOpen, setIsAddDeviceOpen] = useState(false)
+  const [devices, setDevices] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string|null>(null)
+
+  useEffect(() => {
+    setLoading(true)
+    apiService.getDevices().then(resp => {
+      if (resp.success) {
+        setDevices(resp.data)
+        setError(null)
+      } else {
+        setDevices([])
+        setError(resp.error || 'Erro ao buscar devices')
+      }
+      setLoading(false)
+    })
+  }, [])
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
@@ -58,23 +76,23 @@ export default function IoTDevicesPage() {
               </Button>
             </div>
 
-            {/* Metrics Grid */}
+            {/* Metrics Grid - simples, só mostra total real */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               <MetricCard
                 title="Total Devices"
-                value="3"
+                value={devices.length}
                 change={{ value: "Connected devices ⚙️", isPositive: true }}
                 icon={<Cog className="h-5 w-5" />}
               />
               <MetricCard
                 title="Active Devices"
-                value="3"
+                value={devices.filter(d => d.active).length}
                 change={{ value: "Currently producing ⚡", isPositive: true }}
                 icon={<Activity className="h-5 w-5" />}
               />
               <MetricCard
                 title="Offline Devices"
-                value="0"
+                value={devices.filter(d => d.active===false).length}
                 change={{ value: "Not responding ⚠️", isPositive: true }}
                 icon={<AlertCircle className="h-5 w-5" />}
               />
@@ -90,39 +108,25 @@ export default function IoTDevicesPage() {
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               {/* Devices List */}
               <div className="lg:col-span-2 space-y-4">
-                <DeviceCard
-                  name="Solar Panel Array A"
-                  location="Rooftop - North"
-                  type="Solar"
-                  deviceId="device-001"
-                  status="active"
-                  currentProduction={1847}
-                  maxCapacity={2000}
-                  efficiency={92.35}
-                  lastSync="2 min ago"
-                />
-                <DeviceCard
-                  name="Solar Panel Array B"
-                  location="Rooftop - South"
-                  type="Solar"
-                  deviceId="device-002"
-                  status="active"
-                  currentProduction={1923}
-                  maxCapacity={2000}
-                  efficiency={96.15}
-                  lastSync="5 min ago"
-                />
-                <DeviceCard
-                  name="Wind Turbine Unit 1"
-                  location="Ground Level"
-                  type="Wind"
-                  deviceId="device-003"
-                  status="active"
-                  currentProduction={1464}
-                  maxCapacity={1800}
-                  efficiency={81.33}
-                  lastSync="1 min ago"
-                />
+                {loading && <div className="text-gray-600">Carregando dispositivos...</div>}
+                {error && <div className="text-red-500">{error}</div>}
+                {!loading && !error && devices.length === 0 && (
+                  <div className="text-gray-600">Nenhum dispositivo cadastrado ainda.</div>
+                )}
+                {devices.map(device => (
+                  <DeviceCard
+                    key={device.id}
+                    name={device.name}
+                    location={device.location?.place || device.location?.site || device.location || '-'}
+                    type={device.type || 'Solar'}
+                    deviceId={device.id}
+                    status={device.active ? 'active' : 'offline'}
+                    currentProduction={device.currentProduction || 0}
+                    maxCapacity={device.maxCapacity || 2000}
+                    efficiency={device.efficiency || 90}
+                    lastSync={device.last_seen_at ? new Date(device.last_seen_at).toLocaleString() : '-'}
+                  />
+                ))}
               </div>
               
               {/* Device Configuration */}
