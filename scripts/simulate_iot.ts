@@ -1,5 +1,16 @@
 import "dotenv/config";
 import { clusterApiUrl, Connection } from "@solana/web3.js";
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const supabase = supabaseUrl && supabaseServiceKey
+  ? createClient(supabaseUrl, supabaseServiceKey)
+  : null;
 
 // Get cluster from environment variable or default to localnet
 const cluster = process.env.CLUSTER || "localnet";
@@ -58,6 +69,17 @@ class IoTSimulator {
     }
   }
 
+  private async saveReading(reading: any) {
+    if (!supabase) {
+      console.warn('[SIM] Supabase not configured. Skipping DB insert:', reading);
+      return;
+    }
+    const { error } = await supabase.from('readings').insert(reading);
+    if (error) {
+      console.error('[SIM][DB ERROR]', error);
+    }
+  }
+
   async startSimulation() {
     if (this.isRunning) {
       console.log("Simulation is already running!");
@@ -74,7 +96,7 @@ class IoTSimulator {
     }, 5000); // Update every 5 seconds
   }
 
-  private simulateEnergyGeneration() {
+  private async simulateEnergyGeneration() {
     const timestamp = new Date().toISOString();
     let totalPower = 0;
     let activeDevices = 0;
@@ -82,7 +104,7 @@ class IoTSimulator {
     console.log(`\n${timestamp}`);
     console.log("=" .repeat(50));
 
-    this.devices.forEach(device => {
+    for (const device of this.devices) {
       // Simulate device status changes (5% chance)
       if (Math.random() < 0.05) {
         device.isActive = !device.isActive;
@@ -97,11 +119,30 @@ class IoTSimulator {
         totalPower += currentPower;
         activeDevices++;
         
+        const voltage_v = 210 + Math.random() * 20;
+        const current_a = 5 + Math.random();
+        const frequency_hz = 59 + Math.random() * 2;
+        const reading = {
+          device_id: device.id,
+          ts_device: timestamp,
+          energy_generated_kwh: parseFloat((currentPower * 5 / 1000 / 60).toFixed(3)),
+          voltage_v: parseFloat(voltage_v.toFixed(1)),
+          current_a: parseFloat(current_a.toFixed(2)),
+          frequency_hz: parseFloat(frequency_hz.toFixed(2)),
+          raw_payload: {
+            location: device.location,
+            base_power_profile: device.powerGenerated,
+            currentPower,
+          },
+          signature: 'simulated',
+          onchain_status: 'pending'
+        };
+        this.saveReading(reading); // Salva na tabela readings
         console.log(`${device.location}: ${currentPower.toFixed(1)}W`);
       } else {
         console.log(`${device.location}: OFFLINE`);
       }
-    });
+    }
 
     console.log("-".repeat(50));
     console.log(`Total Power: ${totalPower.toFixed(1)}W (${(totalPower/1000).toFixed(2)}kW)`);
