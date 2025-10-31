@@ -192,8 +192,8 @@ VoltChain is an open-source project. Contributions are welcome! Please read our 
 
 ## Contributors
 
-- **@AiraaMel** - Project Lead & Frontend Development
-- **@sarafarencena** - Blockchain & Backend Integration
+- **@AiraaMel** 
+- **@sarafarencena** 
 
 ## License
 
