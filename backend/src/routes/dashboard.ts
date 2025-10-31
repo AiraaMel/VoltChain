@@ -41,7 +41,7 @@ router.get('/v1/dashboard', async (req: Request, res: Response) => {
     }
 
     // Calcular métricas
-    const totalEnergy = readings.reduce((sum, r) => sum + (r.energy_generated_kwh || 0), 0) || 5234;
+    const totalEnergy = readings.reduce((sum: number, r: any) => sum + (r.energy_generated_kwh || 0), 0) || 5234;
     const averagePrice = 0.38;
     const totalEarnings = totalEnergy * averagePrice;
     const activeDevices = devices.length || 3;

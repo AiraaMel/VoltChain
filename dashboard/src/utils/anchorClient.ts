@@ -16,7 +16,8 @@ const DEVNET_ENDPOINT = "https://api.devnet.solana.com";
 /**
  * Tipo para a wallet Phantom
  */
-interface PhantomWallet extends Wallet {
+interface PhantomWallet {
+  publicKey: PublicKey | null;
   isPhantom?: boolean;
   connect(): Promise<{ publicKey: PublicKey }>;
   disconnect(): Promise<void>;
@@ -57,6 +58,10 @@ async function createProvider(): Promise<AnchorProvider> {
     await wallet.connect();
   }
   
+  if (!wallet.publicKey) {
+    throw new Error("Falha ao conectar à wallet Phantom");
+  }
+  
   console.log("✅ Wallet Phantom conectada:", wallet.publicKey.toBase58());
 
   const connection = new Connection(DEVNET_ENDPOINT, "confirmed");
@@ -82,7 +87,7 @@ async function createProgram(): Promise<Program> {
   const program = new Program(
     idl as any,
     PROGRAM_ID,
-    provider
+    provider as any
   );
 
   console.log("📋 Programa VoltChain carregado:", PROGRAM_ID.toBase58());

@@ -80,19 +80,19 @@ export default function IoTDevicesPage() {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               <MetricCard
                 title="Total Devices"
-                value={devices.length}
+                value={devices.length.toString()}
                 change={{ value: "Connected devices ⚙️", isPositive: true }}
                 icon={<Cog className="h-5 w-5" />}
               />
               <MetricCard
                 title="Active Devices"
-                value={devices.filter(d => d.active).length}
+                value={devices.filter(d => d.active).length.toString()}
                 change={{ value: "Currently producing ⚡", isPositive: true }}
                 icon={<Activity className="h-5 w-5" />}
               />
               <MetricCard
                 title="Offline Devices"
-                value={devices.filter(d => d.active===false).length}
+                value={devices.filter(d => d.active===false).length.toString()}
                 change={{ value: "Not responding ⚠️", isPositive: true }}
                 icon={<AlertCircle className="h-5 w-5" />}
               />

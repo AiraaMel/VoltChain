@@ -16,10 +16,18 @@ target/types/
 .env
 .env.local
 .env.*.local
+.env.development
+.env.production
+.env.test
 
 # Logs
 *.log
 logs/
+*.save
+*.swp
+*.tmp
+*~
+*.bak
 
 # Runtime data
 pids/
@@ -91,6 +99,8 @@ temp/
 *.swp
 *.swo
 *~
+*.save
+nano.*.save
 
 # OS generated files
 .DS_Store
@@ -104,3 +114,9 @@ Thumbs.db
 # Solana
 test-ledger/
 .anchor/
+onchain/target/
+onchain/.anchor/
+
+# Local data
+*.local.json
+supabase/.temp/

@@ -12,10 +12,12 @@ console.log('🔍 Debug - SUPABASE_URL:', supabaseUrl ? 'SET' : 'NOT SET');
 console.log('🔍 Debug - SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? 'SET' : 'NOT SET');
 
 // Modo mock se não houver configuração
+let supabaseInstance: any;
+
 if (!supabaseUrl || !supabaseServiceKey) {
   console.log('🔧 Running in MOCK MODE - No Supabase required');
   
-  export const supabase = {
+  supabaseInstance = {
     from: (table: string) => ({
       insert: (data: any) => ({
         select: () => ({
@@ -45,13 +47,15 @@ if (!supabaseUrl || !supabaseServiceKey) {
 } else {
   // Modo real com Supabase
   console.log('✅ Using real Supabase connection');
-  export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  supabaseInstance = createClient(supabaseUrl, supabaseServiceKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false
     }
   });
 }
+
+export const supabase = supabaseInstance;
 
 export interface Device {
   id: string;

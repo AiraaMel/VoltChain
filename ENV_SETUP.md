@@ -26,11 +26,11 @@ NEXT_PUBLIC_MARKET_PUBKEY=YourDevnetWalletAddressHere
 
 # Supabase Configuration (Public Keys - Safe for client-side)
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your_supabase_anon_key>
 
 # Supabase Configuration (Server-side - Keep Secret!)
 SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_KEY=<your_supabase_service_role_key>
 
 # Energy Pricing
 PRICE_PER_KWH_USD=0.38
@@ -179,11 +179,11 @@ NEXT_PUBLIC_NETWORK=devnet
 NEXT_PUBLIC_MARKET_PUBKEY=11111111111111111111111111111111
 
 # Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://abcdefghijk.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiY2RlZmdoaWprIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDE3MjE3MjAsImV4cCI6MTk1NzI5NzcyMH0.placeholder
+NEXT_PUBLIC_SUPABASE_URL=<your_supabase_project_url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your_supabase_anon_key>
 
-SUPABASE_URL=https://abcdefghijk.supabase.co
-SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiY2RlZmdoaWprIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY0MTcyMTcyMCwiZXhwIjoxOTU3Mjk3NzIwfQ.placeholder
+SUPABASE_URL=<your_supabase_project_url>
+SUPABASE_SERVICE_KEY=<your_supabase_service_role_key>
 
 # Energy Pricing
 PRICE_PER_KWH_USD=0.38
