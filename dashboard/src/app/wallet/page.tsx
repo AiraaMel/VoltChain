@@ -3,7 +3,6 @@
 import { Sidebar } from "@/components/ui/sidebar"
 import { Topbar } from "@/components/ui/topbar"
 import { WalletConnectionCard } from "@/components/wallet/wallet-connection-card"
-import { ClaimCard } from "@/components/wallet/claim-card"
 import { EarningsTabs } from "@/components/wallet/earnings-tabs"
 import { TransactionList } from "@/components/wallet/transaction-list"
 import { useWallet } from "@solana/wallet-adapter-react"
@@ -39,18 +38,6 @@ export default function WalletPage() {
               </p>
             </div>
 
-            {/* Wallet Connection and Claim Section */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              {/* Wallet Connection */}
-              {/* <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
-                <WalletConnectionCard />
-              </div> */}
-              
-              {/* Claim Card */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
-                <ClaimCard />
-              </div>
-            </div>
 
             {/* Earnings Summary */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
@@ -69,8 +56,8 @@ export default function WalletPage() {
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
                 {connected 
-                  ? "Conectado à Phantom Wallet na Devnet."
-                  : "Conecte sua Phantom Wallet para começar."
+                  ? "Connected to Phantom Wallet (Devnet). Your wallet and Anchor connection remain active."
+                  : "Connect your Phantom Wallet to begin."
                 }
               </p>
             </div>
