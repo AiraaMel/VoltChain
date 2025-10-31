@@ -1,165 +1,214 @@
-# VoltChain/ENX Energy Platform
+# VoltChain
 
-Plataforma completa para monitoramento e gestão de energia renovável com integração blockchain.
+VoltChain is a decentralized platform that tokenizes surplus solar energy using Solana smart contracts and IoT integration. The platform connects households, cooperatives, and small producers into a transparent energy marketplace where each kilowatt-hour becomes a digital asset.
 
-## 🏗️ Arquitetura do Monorepo
+## Introduction
+
+VoltChain addresses the challenge of unmonetized surplus solar energy by creating a blockchain-based marketplace. IoT devices collect real-time energy production data, which is tokenized on Solana and made available for trading through an intuitive web dashboard. The platform enables real-time monitoring, automated tokenization, and seamless earnings management.
+
+## Architecture Overview
+
+VoltChain follows a layered architecture integrating four primary components:
+
+- **IoT Layer**: ESP32 devices with energy sensors collect and transmit production data
+- **Backend Layer**: Node.js Express server on Supabase manages data ingestion and validation
+- **Blockchain Layer**: Solana smart contracts (Anchor) handle tokenization and transaction settlement
+- **Frontend Layer**: Next.js dashboard provides monitoring, wallet integration, and earnings management
 
 ```
-enx-energy-platform/
-├── backend/          # API REST MVP (Node.js + TypeScript)
-├── onchain/          # Programa Solana (Anchor Framework)
-├── frontend/         # Interface Web (React + Next.js)
-└── iot/             # Dispositivos IoT (ESP32 + Arduino)
+ESP32 Device → Backend API → Supabase Database
+                                      ↓
+Frontend Dashboard ← Solana Blockchain ← Smart Contracts
 ```
 
-## 🚀 Status do Projeto
+## Tech Stack
 
-| Componente | Status | Descrição |
-|------------|--------|-----------|
-| **Backend** | ✅ **Implementado** | API MVP com Express, Supabase e Solana |
-| **On-chain** | 🚧 **Planejado** | Programa Anchor para Solana |
-| **Frontend** | 🚧 **Planejado** | Interface React/Next.js |
-| **IoT** | 🚧 **Planejado** | Dispositivos ESP32/Arduino |
-
-## 🎯 Funcionalidades Implementadas
-
-### Backend MVP
-- ✅ **API REST** com Express e TypeScript
-- ✅ **Banco de Dados** Supabase (PostgreSQL)
-- ✅ **Autenticação HMAC** para dispositivos IoT
-- ✅ **Integração Solana** (opcional)
-- ✅ **Endpoints** para dispositivos, leituras e blockchain
-- ✅ **Logging** estruturado com Pino
-
-### Endpoints Disponíveis
-- `GET /healthz` - Health check
-- `POST /v1/devices` - Criar dispositivo (admin)
-- `POST /v1/ingest` - Enviar leitura (HMAC)
-- `GET /v1/devices/:id/readings` - Listar leituras (admin)
-- `POST /v1/onchain/flush` - Sincronizar blockchain (admin)
-
-## 🛠️ Tecnologias
+### Frontend
+- Next.js 16 with TypeScript
+- TailwindCSS for styling
+- shadcn/ui component library
+- Solana Wallet Adapter for Phantom integration
 
 ### Backend
-- **Node.js 20+** com TypeScript
-- **Express** para API REST
-- **Supabase** como banco de dados
-- **Solana Web3.js** para blockchain
-- **Pino** para logging
+- Node.js with Express and TypeScript
+- Supabase (PostgreSQL) for data storage
+- Pino for structured logging
+- HMAC authentication for IoT devices
 
-### Planejado
-- **Anchor Framework** para programa Solana
-- **React 18+** com Next.js para frontend
-- **ESP32/Arduino** para dispositivos IoT
+### Blockchain
+- Solana Devnet
+- Anchor Framework for smart contracts
+- Solana Web3.js for blockchain integration
+- Phantom Wallet for transaction signing
 
-## 🚀 Quick Start
+### IoT
+- ESP32 microcontrollers
+- HTTP/HTTPS communication
+- HMAC-SHA256 authentication
+- Energy sensor integration
 
-### 1. Backend (Implementado)
+## Installation
+
+### Prerequisites
+- Node.js 20+
+- npm or yarn
+- Solana CLI tools
+- Supabase account
+- Phantom Wallet extension
+
+### Backend Setup
 
 ```bash
 cd backend
 npm install
-cp env.example .env
-# Configure as variáveis de ambiente
+cp .env.example .env
+# Configure environment variables
 npm run dev
 ```
 
-### 2. Banco de Dados
+### Frontend Setup
 
 ```bash
-# Execute a migration
+cd dashboard
+npm install
+cp .env.example .env.local
+# Configure environment variables
+npm run dev
+```
+
+### Database Migration
+
+```bash
+# Using Supabase CLI
 supabase db push
-# ou
+
+# Or manually execute SQL migrations
 psql -f backend/db/migrations/001_init.sql
+psql -f backend/db/migrations/002_core_entities.sql
+psql -f backend/db/migrations/003_c2b_transactions_v2.sql
 ```
 
-### 3. Teste da API
+### Blockchain Setup
 
 ```bash
-# Health check
-curl http://localhost:8080/healthz
+# Configure Solana CLI for Devnet
+solana config set --url https://api.devnet.solana.com
 
-# Criar dispositivo
-curl -X POST http://localhost:8080/v1/devices \
-  -H "Authorization: Bearer dev-admin-token" \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Painel Solar 1"}'
+# Generate keypair (if needed)
+solana-keygen new --outfile ~/.config/solana/id.json
+
+# Fund keypair
+solana airdrop 2
+
+# Build and deploy Anchor program
+cd onchain
+anchor build
+anchor deploy
 ```
 
-## 📋 Próximos Passos
+## Environment Variables
 
-### Backend
-- [ ] Implementar testes automatizados
-- [ ] Adicionar validação com Zod
-- [ ] Implementar rate limiting
-- [ ] Melhorar tratamento de erros
-
-### On-chain
-- [ ] Configurar ambiente Anchor
-- [ ] Implementar programa Solana
-- [ ] Criar IDL para integração
-- [ ] Deploy em devnet
-
-### Frontend
-- [ ] Configurar Next.js com TypeScript
-- [ ] Implementar dashboard principal
-- [ ] Integrar com backend API
-- [ ] Adicionar integração Solana
-
-### IoT
-- [ ] Implementar código ESP32
-- [ ] Criar biblioteca de sensores
-- [ ] Implementar protocolo HMAC
-- [ ] Desenvolver interface de configuração
-
-## 🔧 Configuração
-
-### Variáveis de Ambiente (Backend)
-
-```env
-# Servidor
+### Backend (.env)
+```
 PORT=8080
-
-# Supabase (obrigatório)
-SUPABASE_URL=sua_url_do_supabase
-SUPABASE_SERVICE_ROLE_KEY=sua_chave_de_servico
-
-# Blockchain (opcional)
-ONCHAIN_ENABLED=false
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+ONCHAIN_ENABLED=true
 SOLANA_RPC_URL=https://api.devnet.solana.com
-SOLANA_PROGRAM_ID=SeuProgramId1111111111111111111111111111111
-SOLANA_WALLET_SECRET=[array JSON ou base58]
-
-# Admin (opcional)
-ADMIN_TOKEN=dev-admin-token
+SOLANA_PROGRAM_ID=your_program_id
+SOLANA_WALLET_SECRET=[JSON array or base58]
+ADMIN_TOKEN=your_admin_token
 ```
 
-## 📚 Documentação
+### Frontend (.env.local)
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
+NEXT_PUBLIC_PROGRAM_ID=your_program_id
+```
 
-- [Backend README](backend/README.md) - API e configuração
-- [On-chain README](onchain/README.md) - Programa Solana
-- [Frontend README](frontend/README.md) - Interface web
-- [IoT README](iot/README.md) - Dispositivos IoT
+### On-chain (config.example.env)
+```
+ANCHOR_PROVIDER_URL=https://api.devnet.solana.com
+ANCHOR_WALLET=~/.config/solana/id.json
+PROGRAM_ID=your_program_id
+```
 
-## 🤝 Contribuição
+## Running Locally
 
-1. Fork o repositório
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
-5. Abra um Pull Request
+### Development Mode
 
-## 📄 Licença
+**Backend** (runs on port 8080):
+```bash
+cd backend
+npm run dev
+```
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para detalhes.
+**Frontend** (runs on port 3000):
+```bash
+cd dashboard
+npm run dev
+```
 
-## 🆘 Suporte
+### Production Build
 
-Para dúvidas ou problemas:
-- Abra uma [issue](https://github.com/voltage/energy-platform/issues)
-- Consulte a documentação de cada componente
-- Verifique os logs do backend para debugging
+**Backend**:
+```bash
+cd backend
+npm run build
+npm start
+```
 
----
+**Frontend**:
+```bash
+cd dashboard
+npm run build
+npm start
+```
 
-**VoltChain/ENX** - Energia renovável na blockchain 🌱⚡
+## Folder Structure
+
+```
+voltchain-platform/
+├── backend/              # REST API (Node.js + Express + Supabase)
+│   ├── src/
+│   │   ├── routes/      # API endpoints
+│   │   ├── services/    # Supabase and Solana integration
+│   │   └── utils/       # Utilities (crypto, validation)
+│   └── db/
+│       └── migrations/  # SQL migration files
+├── dashboard/           # Frontend (Next.js + TypeScript)
+│   ├── src/
+│   │   ├── app/         # Next.js pages and routes
+│   │   ├── components/  # React components
+│   │   ├── hooks/       # Custom React hooks
+│   │   └── lib/         # Utilities and configurations
+│   └── public/          # Static assets
+├── onchain/             # Solana program (Anchor Framework)
+│   ├── programs/
+│   │   └── voltchain/   # Anchor program source code
+│   ├── tests/           # Program integration tests
+│   └── migrations/      # Deployment scripts
+├── iot/                 # IoT device implementations
+│   └── README.md        # IoT documentation
+├── scripts/             # Utility scripts
+├── docs/                # Project documentation
+└── README.md            # This file
+```
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Contributors
+
+- Project Maintainers
+- Community Contributors
+
+## Contact
+
+For questions, issues, or contributions:
+- Open an issue on GitHub
+- Review component-specific documentation in respective README files
+- Check the main documentation at `/docs/voltchain-documentation.md`

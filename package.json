@@ -1,12 +1,18 @@
 {
-  "name": "enx-energy-platform",
+  "name": "voltchain-platform",
   "version": "0.1.0",
-  "description": "ENX Energy Token Platform - MVP",
+  "description": "VoltChain Energy Token Platform - MVP",
   "main": "index.js",
   "scripts": {
     "build": "anchor build",
     "test": "anchor test",
     "deploy": "anchor deploy",
+    "deploy:local": "CLUSTER=localnet ts-node onchain/migrations/deploy.ts",
+    "deploy:devnet": "CLUSTER=devnet ts-node onchain/migrations/deploy.ts",
+    "deploy:testnet": "CLUSTER=testnet ts-node onchain/migrations/deploy.ts",
+    "devnet": "./setup-devnet.sh",
+    "devnet:stop": "./stop-devnet.sh",
+    "run:migrate": "ts-node onchain/migrations/deploy.ts",
     "run:simulate": "ts-node scripts/simulate_iot.ts",
     "run:listener": "ts-node scripts/listener.ts",
     "run:settlement": "ts-node scripts/settlement.ts",
@@ -17,7 +23,8 @@
     "solana",
     "anchor",
     "energy",
-    "tokenization"
+    "tokenization",
+    "voltchain"
   ],
   "author": "Empresa X",
   "license": "MIT",
@@ -25,6 +32,7 @@
     "@coral-xyz/anchor": "^0.32.1",
     "@solana/spl-token": "^0.3.9",
     "@solana/web3.js": "^1.87.6",
+    "@supabase/supabase-js": "^2.77.0",
     "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
     "bs58": "^5.0.0",

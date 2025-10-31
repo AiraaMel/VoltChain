@@ -1,9 +1,9 @@
-# ENX Energy Platform Makefile
+# VoltChain Energy Platform Makefile
 
 .PHONY: help build test deploy clean install simulate listener settlement
 
 help: ## Show this help message
-	@echo "ENX Energy Platform - Available Commands:"
+	@echo "VoltChain Energy Platform - Available Commands:"
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
@@ -45,7 +45,7 @@ dev: ## Start development environment
 	@echo "Development environment ready!"
 
 setup: ## Initial setup
-	@echo "Setting up ENX Energy Platform..."
+	@echo "Setting up VoltChain Energy Platform..."
 	@make install
 	@make build
 	@echo "Setup complete! Run 'make dev' to start development."

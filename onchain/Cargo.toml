@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "programs/enx"
+    "programs/voltchain"
 ]
 resolver = "2"
 

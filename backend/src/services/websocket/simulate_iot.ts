@@ -26,8 +26,8 @@ async function simulateIoT() {
   anchor.setProvider(provider);
 
   // Load the program
-  const programId = new PublicKey("ENXEnergyToken1111111111111111111111111111111111");
-  const program = new anchor.Program(require("../target/idl/enx.json"), programId, provider);
+  const programId = new PublicKey("VoltChainEnergy1111111111111111111111111111111111");
+  const program = new anchor.Program(require("../target/idl/voltchain.json"), programId, provider);
 
   // Get pool PDA
   const [poolPda] = PublicKey.findProgramAddressSync([Buffer.from("pool")], programId);

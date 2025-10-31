@@ -4,6 +4,38 @@ import { generateDeviceSecret } from '../utils/crypto';
 
 const router = Router();
 
+/**
+ * List devices (simple list for dashboard)
+ * GET /v1/devices
+ * Protected by ADMIN_TOKEN if set
+ */
+router.get('/v1/devices', async (req: Request, res: Response) => {
+  try {
+    const adminToken = process.env.ADMIN_TOKEN;
+    if (adminToken) {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || authHeader !== `Bearer ${adminToken}`) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+    }
+
+    const { data: devices, error } = await supabase
+      .from('devices')
+      .select('id, name, active, location, created_at, last_seen_at')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Database error:', error);
+      return res.status(500).json({ error: 'Failed to fetch devices' });
+    }
+
+    res.status(200).json({ devices: devices || [] });
+  } catch (error) {
+    console.error('Error listing devices:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 interface CreateDeviceRequest {
   name: string;
   user_id?: string;

@@ -1,7 +1,7 @@
 {
-  "name": "enx-energy-platform",
+  "name": "voltchain-platform",
   "version": "0.1.0",
-  "description": "ENX Energy Token Platform - MVP",
+  "description": "VoltChain Energy Token Platform - MVP",
   "type": "module",
   "scripts": {
     "build": "anchor build",
@@ -13,7 +13,7 @@
   },
   "workspace": {
     "programs": [
-      "programs/enx"
+      "programs/voltchain"
     ],
     "scripts": [
       "scripts/simulate_iot.ts",
@@ -21,11 +21,11 @@
       "scripts/settlement.ts"
     ],
     "tests": [
-      "tests/enx.test.ts"
+      "tests/voltchain.test.ts"
     ]
   },
   "anchor": {
-    "programId": "ENXEnergyToken1111111111111111111111111111111111",
+    "programId": "VoltChainEnergy1111111111111111111111111111111111",
     "cluster": "devnet",
     "wallet": "~/.config/solana/id.json"
   }

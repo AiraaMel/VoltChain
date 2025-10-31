@@ -1,8 +1,8 @@
-# VoltChain/ENX - On-chain Module
+# VoltChain - On-chain Module
 
 ## Overview
 
-This directory will contain the Solana on-chain components for the VoltChain/ENX energy platform.
+This directory will contain the Solana on-chain components for the VoltChain energy platform.
 
 ## Future Implementation
 

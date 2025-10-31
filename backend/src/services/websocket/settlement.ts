@@ -109,7 +109,7 @@ async function generateSettlementReport(
   const users: SettlementReport["users"] = [];
 
   for (const claim of userClaims) {
-    const burnedKwh = claim.account.burnedEnx.toNumber();
+    const burnedKwh = claim.account.burnedVoltchain.toNumber();
     totalBurned += burnedKwh;
     
     users.push({
@@ -151,7 +151,7 @@ async function generateSettlementReport(
 }
 
 async function runSettlement() {
-  console.log("Starting ENX Energy Settlement Process...");
+  console.log("Starting VoltChain Energy Settlement Process...");
   
   // Setup connection and provider
   const connection = new Connection("https://api.devnet.solana.com", "confirmed");
@@ -160,8 +160,8 @@ async function runSettlement() {
   anchor.setProvider(provider);
 
   // Load the program
-  const programId = new PublicKey("ENXEnergyToken1111111111111111111111111111111111");
-  const program = new anchor.Program(require("../target/idl/enx.json"), programId, provider);
+  const programId = new PublicKey("VoltChainEnergy1111111111111111111111111111111111");
+  const program = new anchor.Program(require("../target/idl/voltchain.json"), programId, provider);
 
   // Get pool PDA
   const [poolPda] = PublicKey.findProgramAddressSync([Buffer.from("pool")], programId);
