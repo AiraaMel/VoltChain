@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SolanaProvider } from "@/components/SolanaProvider";
+import { NotificationProvider } from "@/context/NotificationContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,7 +32,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SolanaProvider>
-            {children}
+            <NotificationProvider>
+              {children}
+            </NotificationProvider>
           </SolanaProvider>
         </ThemeProvider>
       </body>

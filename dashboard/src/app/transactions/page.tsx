@@ -20,6 +20,7 @@ import {
   Clock,
   RefreshCw
 } from "lucide-react"
+import { useNotifications } from "@/context/NotificationContext"
 
 interface EnergyTransaction {
   id: string;
@@ -50,9 +51,12 @@ interface WalletEarnings {
   updated_at: string;
 }
 
+const formatUSD = (n: number) => `$${n.toFixed(2)}`
+
 export default function TransactionsPage() {
   const { connected, publicKey, signTransaction } = useWallet()
   const { connection } = useConnection()
+  const { addNotification } = useNotifications()
   const [kwh, setKwh] = useState<string>('10')
   const [isProcessingSale, setIsProcessingSale] = useState(false)
   const [saleStatus, setSaleStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -225,6 +229,13 @@ export default function TransactionsPage() {
       setSaleStatus('success')
       setSaleMessage(`Transaction confirmed! Signature: ${signature.slice(0, 16)}...`)
       
+      // Show notification
+      addNotification(
+        "sale",
+        "Energy Sale Completed",
+        `Your energy sale of ${formatUSD(totalUsd)} has been processed successfully.`
+      )
+      
       // Update local earnings after successful sale
       setLocalEarnings((prev) => ({
         available: prev.available + totalUsd,
@@ -289,6 +300,13 @@ export default function TransactionsPage() {
     
     setClaimsHistory((prev) => [claim, ...prev])
     setLocalEarnings((prev) => ({ ...prev, available: 0 }))
+    
+    // Show notification
+    addNotification(
+      "claim",
+      "Claim Successful",
+      `You claimed ${formatUSD(claim.amount)} in earnings to your wallet.`
+    )
     
     setClaimStatus('success')
     setClaimMessage(`Saque realizado com sucesso: $${claim.amount.toFixed(2)}`)

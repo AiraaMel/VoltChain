@@ -13,7 +13,7 @@ import { SeedDevData } from '@/components/SeedDevData'
 export default function Dashboard() {
   const { data, loading, error, backendConnected } = useDashboardData()
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <SeedDevData />
       {/* Sidebar */}
       <Sidebar />
