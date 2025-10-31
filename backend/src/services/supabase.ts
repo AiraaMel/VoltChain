@@ -7,15 +7,15 @@ dotenv.config();
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Debug para verificar se as variáveis estão sendo carregadas
-console.log('🔍 Debug - SUPABASE_URL:', supabaseUrl ? 'SET' : 'NOT SET');
-console.log('🔍 Debug - SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? 'SET' : 'NOT SET');
+// Debug to check if variables are being loaded
+console.log('Debug - SUPABASE_URL:', supabaseUrl ? 'SET' : 'NOT SET');
+console.log('Debug - SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? 'SET' : 'NOT SET');
 
-// Modo mock se não houver configuração
+// Mock mode if not configured
 let supabaseInstance: any;
 
 if (!supabaseUrl || !supabaseServiceKey) {
-  console.log('🔧 Running in MOCK MODE - No Supabase required');
+  console.log('Running in MOCK MODE - No Supabase required');
   
   supabaseInstance = {
     from: (table: string) => ({
@@ -45,8 +45,8 @@ if (!supabaseUrl || !supabaseServiceKey) {
     })
   };
 } else {
-  // Modo real com Supabase
-  console.log('✅ Using real Supabase connection');
+  // Real mode with Supabase
+  console.log('Using real Supabase connection');
   supabaseInstance = createClient(supabaseUrl, supabaseServiceKey, {
     auth: {
       autoRefreshToken: false,

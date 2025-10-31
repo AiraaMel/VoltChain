@@ -81,7 +81,7 @@ export default function IoTDevicesPage() {
               <MetricCard
                 title="Total Devices"
                 value={devices.length.toString()}
-                change={{ value: "Connected devices ⚙️", isPositive: true }}
+                change={{ value: "Connected devices", isPositive: true }}
                 icon={<Cog className="h-5 w-5" />}
               />
               <MetricCard
@@ -93,13 +93,13 @@ export default function IoTDevicesPage() {
               <MetricCard
                 title="Offline Devices"
                 value={devices.filter(d => d.active===false).length.toString()}
-                change={{ value: "Not responding ⚠️", isPositive: true }}
+                change={{ value: "Not responding", isPositive: true }}
                 icon={<AlertCircle className="h-5 w-5" />}
               />
               <MetricCard
                 title="System Health"
                 value="100%"
-                change={{ value: "All systems operational ✅", isPositive: true }}
+                change={{ value: "All systems operational", isPositive: true }}
                 icon={<CheckCircle className="h-5 w-5" />}
               />
             </div>

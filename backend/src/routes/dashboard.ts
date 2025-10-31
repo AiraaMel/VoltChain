@@ -9,9 +9,9 @@ const router = Router();
  */
 router.get('/v1/dashboard', async (req: Request, res: Response) => {
   try {
-    console.log('📊 Dashboard endpoint called');
+    console.log('Dashboard endpoint called');
     
-    // Tentar buscar dados reais do Supabase
+    // Try to fetch real data from Supabase
     let devices = [];
     let readings = [];
     let transactions = [];
@@ -37,16 +37,16 @@ router.get('/v1/dashboard', async (req: Request, res: Response) => {
         .limit(20);
       transactions = txData || [];
     } catch (dbError) {
-      console.log('⚠️ Database error, using mock data:', dbError);
+      console.log('Database error, using mock data:', dbError);
     }
 
-    // Calcular métricas
+    // Calculate metrics
     const totalEnergy = readings.reduce((sum: number, r: any) => sum + (r.energy_generated_kwh || 0), 0) || 5234;
     const averagePrice = 0.38;
     const totalEarnings = totalEnergy * averagePrice;
     const activeDevices = devices.length || 3;
 
-    // Dados mensais (mock por enquanto)
+    // Monthly data (mock for now)
     const monthlyData = [
       { month: "Jan", value: 400 },
       { month: "Feb", value: 300 },
@@ -72,7 +72,7 @@ router.get('/v1/dashboard', async (req: Request, res: Response) => {
       transactions,
     };
 
-    console.log('📊 Dashboard data:', dashboardData);
+    console.log('Dashboard data:', dashboardData);
 
     res.json({
       success: true,
@@ -80,7 +80,7 @@ router.get('/v1/dashboard', async (req: Request, res: Response) => {
     });
 
   } catch (error) {
-    console.error('❌ Dashboard error:', error);
+    console.error('Dashboard error:', error);
     res.status(500).json({ 
       success: false,
       error: 'Internal server error',

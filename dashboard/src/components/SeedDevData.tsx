@@ -7,9 +7,9 @@ export function SeedDevData() {
     if (process.env.NODE_ENV === "development") {
       seedUserData().then(() => {
         // eslint-disable-next-line no-console
-        console.log("Seed do user@voltchain rodou (dev only)")
+        console.log("Seed for user@voltchain completed (dev only)")
       }).catch((err) => {
-        console.log("Seed já existe ou falhou", err)
+        console.log("Seed already exists or failed", err)
       })
     }
   }, [])

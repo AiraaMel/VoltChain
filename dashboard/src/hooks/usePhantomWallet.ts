@@ -4,14 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import { PublicKey } from "@solana/web3.js";
 
 /**
- * Hook para gerenciar conexão com Phantom Wallet
+ * Hook to manage Phantom Wallet connection
  */
 export function usePhantomWallet() {
   const [publicKey, setPublicKey] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isPhantomAvailable, setIsPhantomAvailable] = useState(false);
 
-  // Detectar se Phantom está disponível
+  // Detect if Phantom is available
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -20,26 +20,26 @@ export function usePhantomWallet() {
     
     if (provider && provider.isPhantom) {
       setIsPhantomAvailable(true);
-      console.log("✅ Phantom Wallet detectada");
+      console.log("Phantom Wallet detected");
       
-      // Verificar se já está conectado
+      // Check if already connected
       provider.on("connect", () => {
-        console.log("✅ Phantom conectada:", provider.publicKey?.toString());
+        console.log("Phantom connected:", provider.publicKey?.toString());
         setPublicKey(provider.publicKey?.toString() || null);
       });
 
       provider.on("disconnect", () => {
-        console.log("❌ Phantom desconectada");
+        console.log("Phantom disconnected");
         setPublicKey(null);
       });
 
-      // Tentar recuperar conexão existente
+      // Try to recover existing connection
       if (provider.publicKey) {
         setPublicKey(provider.publicKey.toString());
       }
     } else {
       setIsPhantomAvailable(false);
-      console.log("⚠️ Phantom não está disponível");
+      console.log("Phantom is not available");
     }
 
     return () => {
@@ -52,20 +52,20 @@ export function usePhantomWallet() {
   }, []);
 
   /**
-   * Conectar à Phantom Wallet
+   * Connect to Phantom Wallet
    */
   const connectWallet = useCallback(async () => {
     if (typeof window === "undefined") {
-      alert("Apenas disponível no navegador");
+      alert("Only available in browser");
       return;
     }
 
-    // Verificar ambiente seguro
+    // Check secure context
     const isSecureContext = window.location.protocol === "https:" || 
                            window.location.hostname === "localhost";
 
     if (!isSecureContext) {
-      alert("Por favor, acesse via https ou http://localhost");
+      alert("Please access via https or http://localhost");
       return;
     }
 
@@ -73,7 +73,7 @@ export function usePhantomWallet() {
     const provider = window.solana;
 
     if (!provider || !provider.isPhantom) {
-      alert("Phantom Wallet não detectada. Instale em https://phantom.app/download");
+      alert("Phantom Wallet not detected. Install at https://phantom.app/download");
       window.open("https://phantom.app/download", "_blank");
       return;
     }
@@ -85,14 +85,14 @@ export function usePhantomWallet() {
       const pubkey = resp.publicKey.toString();
       
       setPublicKey(pubkey);
-      console.log("✅ Conectado à Phantom Wallet:", pubkey);
+      console.log("Connected to Phantom Wallet:", pubkey);
     } catch (err: any) {
-      console.error("❌ Erro ao conectar Phantom:", err);
+      console.error("Error connecting to Phantom:", err);
       
       if (err.code === 4001) {
-        alert("Conexão recusada pelo usuário");
+        alert("Connection refused by user");
       } else {
-        alert(`Erro ao conectar: ${err.message || "Erro desconhecido"}`);
+        alert(`Error connecting: ${err.message || "Unknown error"}`);
       }
     } finally {
       setIsConnecting(false);
@@ -100,7 +100,7 @@ export function usePhantomWallet() {
   }, []);
 
   /**
-   * Desconectar da Phantom Wallet
+   * Disconnect from Phantom Wallet
    */
   const disconnectWallet = useCallback(async () => {
     if (typeof window === "undefined") return;
@@ -112,15 +112,15 @@ export function usePhantomWallet() {
       try {
         await provider.disconnect();
         setPublicKey(null);
-        console.log("✅ Desconectado da Phantom Wallet");
+        console.log("Disconnected from Phantom Wallet");
       } catch (err) {
-        console.error("❌ Erro ao desconectar:", err);
+        console.error("Error disconnecting:", err);
       }
     }
   }, []);
 
   /**
-   * Obter PublicKey do Solana Web3
+   * Get Solana Web3 PublicKey
    */
   const getPublicKey = useCallback((): PublicKey | null => {
     if (!publicKey) return null;
@@ -128,13 +128,13 @@ export function usePhantomWallet() {
     try {
       return new PublicKey(publicKey);
     } catch (err) {
-      console.error("❌ Erro ao converter PublicKey:", err);
+      console.error("Error converting PublicKey:", err);
       return null;
     }
   }, [publicKey]);
 
   /**
-   * Formatar endereço para exibição (primeiros 4 e últimos 4 caracteres)
+   * Format address for display (first 4 and last 4 characters)
    */
   const getShortAddress = useCallback((): string | null => {
     if (!publicKey) return null;

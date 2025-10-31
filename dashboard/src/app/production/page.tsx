@@ -88,7 +88,7 @@ export default function ProductionPage() {
               <MetricCard
                 title="System Health"
                 value="Excellent"
-                change={{ value: "All systems operational ✅", isPositive: true }}
+                change={{ value: "All systems operational", isPositive: true }}
                 icon={<Activity className="h-5 w-5" />}
               />
             </div>

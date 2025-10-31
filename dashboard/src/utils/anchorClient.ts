@@ -1,20 +1,20 @@
 /**
  * Anchor Client for VoltChain
- * Integração com Phantom Wallet e Anchor para interagir com o programa Solana
+ * Integration with Phantom Wallet and Anchor to interact with the Solana program
  */
 
 import { AnchorProvider, Program, Wallet } from "@coral-xyz/anchor";
 import { Connection, PublicKey, Transaction, VersionedTransaction } from "@solana/web3.js";
 import idl from "@/lib/idl.json";
 
-// Program ID do VoltChain
+// VoltChain Program ID
 const PROGRAM_ID = new PublicKey(idl.address);
 
-// Connection para devnet
+// Connection to devnet
 const DEVNET_ENDPOINT = "https://api.devnet.solana.com";
 
 /**
- * Tipo para a wallet Phantom
+ * Phantom wallet type
  */
 interface PhantomWallet {
   publicKey: PublicKey | null;
@@ -26,7 +26,7 @@ interface PhantomWallet {
 }
 
 /**
- * Verifica se Phantom está disponível e retorna a wallet
+ * Checks if Phantom is available and returns the wallet
  */
 function getPhantomWallet(): PhantomWallet | null {
   if (typeof window === "undefined") return null;
@@ -42,27 +42,27 @@ function getPhantomWallet(): PhantomWallet | null {
 }
 
 /**
- * Cria um Anchor Provider com a wallet Phantom
+ * Creates an Anchor Provider with Phantom wallet
  */
 async function createProvider(): Promise<AnchorProvider> {
   const wallet = getPhantomWallet();
   
   if (!wallet) {
-    throw new Error("Phantom não está disponível. Por favor, instale a extensão Phantom Wallet.");
+    throw new Error("Phantom wallet is not available. Please install the Phantom Wallet extension.");
   }
 
-  console.log("🔗 Conectando à wallet Phantom...");
+  console.log("Connecting to Phantom wallet...");
   
-  // Conectar se não estiver conectado
+  // Connect if not already connected
   if (!wallet.publicKey) {
     await wallet.connect();
   }
   
   if (!wallet.publicKey) {
-    throw new Error("Falha ao conectar à wallet Phantom");
+    throw new Error("Failed to connect to Phantom wallet");
   }
   
-  console.log("✅ Wallet Phantom conectada:", wallet.publicKey.toBase58());
+  console.log("Phantom wallet connected:", wallet.publicKey.toBase58());
 
   const connection = new Connection(DEVNET_ENDPOINT, "confirmed");
   
@@ -79,7 +79,7 @@ async function createProvider(): Promise<AnchorProvider> {
 }
 
 /**
- * Cria uma instância do programa Anchor
+ * Creates an instance of the Anchor program
  */
 async function createProgram(): Promise<Program> {
   const provider = await createProvider();
@@ -90,14 +90,14 @@ async function createProgram(): Promise<Program> {
     provider as any
   );
 
-  console.log("📋 Programa VoltChain carregado:", PROGRAM_ID.toBase58());
+  console.log("VoltChain program loaded:", PROGRAM_ID.toBase58());
   
   return program;
 }
 
 /**
- * Simula uma transação sem enviar para a blockchain
- * Mostra os logs da execução do programa no console
+ * Simulates a transaction without sending to the blockchain
+ * Shows program execution logs in the console
  */
 export async function simulateWithPhantom(
   instructionName: string,
@@ -105,69 +105,69 @@ export async function simulateWithPhantom(
   accounts: Record<string, PublicKey>
 ): Promise<void> {
   try {
-    console.log("🎲 Iniciando simulação de transação...");
+    console.log("Starting transaction simulation...");
     
     const provider = await createProvider();
     const program = await createProgram();
     const connection = new Connection(DEVNET_ENDPOINT, "confirmed");
 
-    console.log("📝 Instrução:", instructionName);
-    console.log("📦 Argumentos:", args);
-    console.log("🏦 Contas:", accounts);
+    console.log("Instruction:", instructionName);
+    console.log("Arguments:", args);
+    console.log("Accounts:", accounts);
 
-    // Montar a transação
+    // Build the transaction
     const tx = await (program.methods as any)[instructionName](...args)
       .accounts(accounts)
       .transaction();
 
-    // Obter o blockhash mais recente
+    // Get the latest blockhash
     const latestBlockhash = await connection.getLatestBlockhash("finalized");
     tx.recentBlockhash = latestBlockhash.blockhash;
     tx.feePayer = provider.wallet.publicKey;
 
-    // Assinar a transação
+    // Sign the transaction
     const signedTx = await provider.wallet.signTransaction(tx);
 
-    // Simular
+    // Simulate
     const simulation = await connection.simulateTransaction(signedTx, {
       commitment: "confirmed",
       replaceRecentBlockhash: true,
     });
 
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("📊 RESULTADO DA SIMULAÇÃO:");
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("✅ Erro:", simulation.value.err ? JSON.stringify(simulation.value.err, null, 2) : "Nenhum");
-    console.log("📈 Unidades de Computação (CU):", simulation.value.unitsConsumed || "N/A");
-    console.log("💰 Taxa estimada:", simulation.value.fee || "N/A");
-    console.log("📋 Logs do programa:");
+    console.log("----------------------------------------");
+    console.log("SIMULATION RESULT:");
+    console.log("----------------------------------------");
+    console.log("Error:", simulation.value.err ? JSON.stringify(simulation.value.err, null, 2) : "None");
+    console.log("Compute Units (CU):", simulation.value.unitsConsumed || "N/A");
+    console.log("Estimated fee:", simulation.value.fee || "N/A");
+    console.log("Program logs:");
     
     if (simulation.value.logs && simulation.value.logs.length > 0) {
       simulation.value.logs.forEach((log: string, index: number) => {
         console.log(`  ${index + 1}. ${log}`);
       });
     } else {
-      console.log("  Nenhum log disponível");
+      console.log("  No logs available");
     }
     
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("----------------------------------------");
     
     if (simulation.value.err) {
-      console.error("❌ Simulação falhou!");
+      console.error("Simulation failed!");
       throw new Error(`Simulation failed: ${JSON.stringify(simulation.value.err)}`);
     }
 
-    console.log("✅ Simulação bem-sucedida!");
+    console.log("Simulation successful!");
     
   } catch (error) {
-    console.error("❌ Erro ao simular transação:", error);
+    console.error("Error simulating transaction:", error);
     throw error;
   }
 }
 
 /**
- * Envia uma transação real para a blockchain
- * Abre o modal da Phantom para o usuário assinar
+ * Sends a real transaction to the blockchain
+ * Opens Phantom modal for user to sign
  */
 export async function sendWithPhantom(
   instructionName: string,
@@ -175,16 +175,16 @@ export async function sendWithPhantom(
   accounts: Record<string, PublicKey>
 ): Promise<string> {
   try {
-    console.log("📤 Iniciando envio de transação...");
+    console.log("Starting transaction send...");
     
     const provider = await createProvider();
     const program = await createProgram();
 
-    console.log("📝 Instrução:", instructionName);
-    console.log("📦 Argumentos:", args);
-    console.log("🏦 Contas:", accounts);
+    console.log("Instruction:", instructionName);
+    console.log("Arguments:", args);
+    console.log("Accounts:", accounts);
 
-    // Enviar transação usando RPC do Anchor
+    // Send transaction using Anchor RPC
     const txSig = await (program.methods as any)[instructionName](...args)
       .accounts(accounts)
       .rpc({
@@ -192,27 +192,27 @@ export async function sendWithPhantom(
         skipPreflight: false,
       });
 
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("✅ TRANSAÇÃO ENVIADA COM SUCESSO!");
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("🔗 Signature:", txSig);
-    console.log("🌐 Explorer:", `https://solscan.io/tx/${txSig}?cluster=devnet`);
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("----------------------------------------");
+    console.log("TRANSACTION SENT SUCCESSFULLY!");
+    console.log("----------------------------------------");
+    console.log("Signature:", txSig);
+    console.log("Explorer:", `https://solscan.io/tx/${txSig}?cluster=devnet`);
+    console.log("----------------------------------------");
 
     return txSig;
     
   } catch (error) {
-    console.error("❌ Erro ao enviar transação:", error);
+    console.error("Error sending transaction:", error);
     throw error;
   }
 }
 
 /**
- * Funções auxiliares para obter PDAs comuns
+ * Helper functions to get common PDAs
  */
 
 /**
- * Obtém o endereço da conta Pool (PDA com seed "pool")
+ * Gets the Pool account address (PDA with seed "pool")
  */
 export async function getPoolAddress(): Promise<PublicKey> {
   const [poolAddress] = await PublicKey.findProgramAddress(
@@ -223,7 +223,7 @@ export async function getPoolAddress(): Promise<PublicKey> {
 }
 
 /**
- * Obtém o endereço da UserPosition (PDA com seed "user_position" + owner)
+ * Gets the UserPosition address (PDA with seed "user_position" + owner)
  */
 export async function getUserPositionAddress(owner: PublicKey): Promise<PublicKey> {
   const [userPositionAddress] = await PublicKey.findProgramAddress(
@@ -234,7 +234,7 @@ export async function getUserPositionAddress(owner: PublicKey): Promise<PublicKe
 }
 
 /**
- * Obtém o endereço da UserClaim (PDA com seed "user_claim" + owner + saleId)
+ * Gets the UserClaim address (PDA with seed "user_claim" + owner + saleId)
  */
 export async function getUserClaimAddress(owner: PublicKey, saleId: number): Promise<PublicKey> {
   const saleIdBuffer = Buffer.allocUnsafe(8);
@@ -248,7 +248,7 @@ export async function getUserClaimAddress(owner: PublicKey, saleId: number): Pro
 }
 
 /**
- * Obtém o endereço da Sale (PDA com seed "sale" + pool.period)
+ * Gets the Sale address (PDA with seed "sale" + pool.period)
  */
 export async function getSaleAddress(poolPeriod: number): Promise<PublicKey> {
   const periodBuffer = Buffer.allocUnsafe(8);
@@ -262,9 +262,9 @@ export async function getSaleAddress(poolPeriod: number): Promise<PublicKey> {
 }
 
 /**
- * Exemplo de uso:
+ * Usage example:
  * 
- * // Simular registro de usuário
+ * // Simulate user registration
  * await simulateWithPhantom(
  *   "register_user",
  *   [],
@@ -275,10 +275,10 @@ export async function getSaleAddress(poolPeriod: number): Promise<PublicKey> {
  *   }
  * );
  * 
- * // Enviar relatório de energia
+ * // Send energy report
  * await sendWithPhantom(
  *   "energy_report",
- *   [1000000], // 1 kWh em micro kWh (1_000_000)
+ *   [1000000], // 1 kWh in micro kWh (1_000_000)
  *   {
  *     pool: await getPoolAddress(),
  *     userPosition: await getUserPositionAddress(provider.wallet.publicKey),

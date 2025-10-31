@@ -7,7 +7,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const userEmail = 'user@voltchain.com';
 
 export async function seedUserData() {
-  // 1. Garante o usuário
+  // 1. Ensure user exists
   let { data: user } = await supabase
     .from('users')
     .select('*')
@@ -18,12 +18,12 @@ export async function seedUserData() {
     user = u;
   }
   if (!user?.id) throw new Error('User creation failed');
-  // 2. Cria devices para user
+  // 2. Create devices for user
   const { data: devices } = await supabase.from('devices').insert([
-    { name: 'Painel Solar Casa', device_secret: 'secret-x', user_id: user.id, active: true, location: { place: 'Telhado' } },
-    { name: 'Turbina Quintal', device_secret: 'secret-y', user_id: user.id, active: true, location: { place: 'Quintal' } }
+    { name: 'Home Solar Panel', device_secret: 'secret-x', user_id: user.id, active: true, location: { place: 'Roof' } },
+    { name: 'Backyard Turbine', device_secret: 'secret-y', user_id: user.id, active: true, location: { place: 'Backyard' } }
   ]).select();
-  // 3. Readings para cada device
+  // 3. Readings for each device
   for (const device of devices ?? []) {
     await supabase.from('readings').insert([
       {
