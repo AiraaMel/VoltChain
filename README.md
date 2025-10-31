@@ -1,24 +1,33 @@
 # VoltChain
 
-VoltChain is a decentralized platform that tokenizes surplus solar energy using Solana smart contracts and IoT integration. The platform connects households, cooperatives, and small producers into a transparent energy marketplace where each kilowatt-hour becomes a digital asset.
+VoltChain is an open-source decentralized energy platform built to tokenize surplus solar energy using IoT devices, Supabase backend, and Solana smart contracts. The system enables residential producers, cooperatives, and small aggregators to monetize their excess generation transparently through the C2B (Customer-to-Business) energy model.
 
-## Introduction
+## Overview
 
 VoltChain addresses the challenge of unmonetized surplus solar energy by creating a blockchain-based marketplace. IoT devices collect real-time energy production data, which is tokenized on Solana and made available for trading through an intuitive web dashboard. The platform enables real-time monitoring, automated tokenization, and seamless earnings management.
 
-## Architecture Overview
+Each kilowatt-hour of solar energy becomes a digital asset that can be tracked, verified, and traded transparently on the blockchain. The platform reduces barriers to entry for small-scale energy producers and creates new economic opportunities in the renewable energy sector.
+
+## Architecture
 
 VoltChain follows a layered architecture integrating four primary components:
 
-- **IoT Layer**: ESP32 devices with energy sensors collect and transmit production data
-- **Backend Layer**: Node.js Express server on Supabase manages data ingestion and validation
+- **IoT Layer**: ESP32 devices with energy sensors collect and transmit production data using HMAC authentication
+- **Backend Layer**: Node.js Express server on Supabase manages data ingestion, validation, and orchestration
 - **Blockchain Layer**: Solana smart contracts (Anchor) handle tokenization and transaction settlement
 - **Frontend Layer**: Next.js dashboard provides monitoring, wallet integration, and earnings management
 
 ```
-ESP32 Device → Backend API → Supabase Database
-                                      ↓
-Frontend Dashboard ← Solana Blockchain ← Smart Contracts
+[ IoT Device (ESP32) ]
+       │
+       ▼
+[ Supabase Backend ]
+       │
+       ▼
+[ Solana Smart Contract (Anchor) ]
+       │
+       ▼
+[ Next.js Dashboard + Phantom Wallet ]
 ```
 
 ## Tech Stack
@@ -47,48 +56,39 @@ Frontend Dashboard ← Solana Blockchain ← Smart Contracts
 - HMAC-SHA256 authentication
 - Energy sensor integration
 
-## Installation
+## Quick Start
 
 ### Prerequisites
+
 - Node.js 20+
 - npm or yarn
 - Solana CLI tools
-- Supabase account
+- Supabase account and project
 - Phantom Wallet extension
 
-### Backend Setup
+### Installation
+
+**Backend Setup:**
 
 ```bash
 cd backend
 npm install
 cp .env.example .env
-# Configure environment variables
+# Configure environment variables in .env
 npm run dev
 ```
 
-### Frontend Setup
+**Frontend Setup:**
 
 ```bash
 cd dashboard
 npm install
 cp .env.example .env.local
-# Configure environment variables
+# Configure environment variables in .env.local
 npm run dev
 ```
 
-### Database Migration
-
-```bash
-# Using Supabase CLI
-supabase db push
-
-# Or manually execute SQL migrations
-psql -f backend/db/migrations/001_init.sql
-psql -f backend/db/migrations/002_core_entities.sql
-psql -f backend/db/migrations/003_c2b_transactions_v2.sql
-```
-
-### Blockchain Setup
+**Blockchain Setup:**
 
 ```bash
 # Configure Solana CLI for Devnet
@@ -106,10 +106,11 @@ anchor build
 anchor deploy
 ```
 
-## Environment Variables
+### Environment Variables
 
-### Backend (.env)
-```
+**Backend (.env):**
+
+```env
 PORT=8080
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
@@ -120,54 +121,26 @@ SOLANA_WALLET_SECRET=[JSON array or base58]
 ADMIN_TOKEN=your_admin_token
 ```
 
-### Frontend (.env.local)
-```
+**Frontend (.env.local):**
+
+```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
 NEXT_PUBLIC_PROGRAM_ID=your_program_id
 ```
 
-### On-chain (config.example.env)
-```
-ANCHOR_PROVIDER_URL=https://api.devnet.solana.com
-ANCHOR_WALLET=~/.config/solana/id.json
-PROGRAM_ID=your_program_id
-```
+## Features
 
-## Running Locally
+- **Real-time Energy Monitoring**: Track solar energy production from IoT devices with live updates
+- **Blockchain Tokenization**: Convert energy production into digital tokens on Solana
+- **Transparent Transactions**: All energy sales and earnings recorded immutably on-chain
+- **Wallet Integration**: Seamless connection with Phantom Wallet for transaction signing
+- **Earnings Management**: View and claim accumulated earnings from energy sales
+- **Device Management**: Register and monitor multiple IoT devices from a single dashboard
+- **C2B Energy Model**: Enable direct sales from customers to businesses
 
-### Development Mode
-
-**Backend** (runs on port 8080):
-```bash
-cd backend
-npm run dev
-```
-
-**Frontend** (runs on port 3000):
-```bash
-cd dashboard
-npm run dev
-```
-
-### Production Build
-
-**Backend**:
-```bash
-cd backend
-npm run build
-npm start
-```
-
-**Frontend**:
-```bash
-cd dashboard
-npm run build
-npm start
-```
-
-## Folder Structure
+## Project Structure
 
 ```
 voltchain-platform/
@@ -197,18 +170,44 @@ voltchain-platform/
 └── README.md            # This file
 ```
 
+## Documentation
+
+Comprehensive documentation is available in the `/docs` directory:
+
+- [Main Documentation](./docs/README.md) - Overview, features, and getting started guide
+- [Architecture](./docs/architecture.md) - Detailed technical architecture and system design
+- [Setup Guide](./docs/setup.md) - Complete setup and configuration instructions
+
+## Roadmap
+
+- **Phase 1 (MVP)**: Core tokenization and dashboard functionality
+- **Phase 2**: Public API and SDK release for third-party integrations
+- **Phase 3**: Decentralized token marketplace for peer-to-peer trading
+- **Phase 4**: Integration with certified smart meters and utility companies
+- **Phase 5**: Mainnet deployment with comprehensive security audit
+
+## Contributing
+
+VoltChain is an open-source project. Contributions are welcome! Please read our contributing guidelines and code of conduct before submitting pull requests.
+
+## Contributors
+
+- **@AiraaMel** - Project Lead & Frontend Development
+- **@sarafarencena** - Blockchain & Backend Integration
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
-## Contributors
+## Resources
 
-- Project Maintainers
-- Community Contributors
+- [Solana Documentation](https://docs.solana.com/)
+- [Anchor Framework](https://www.anchor-lang.com/)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Next.js Documentation](https://nextjs.org/docs)
 
-## Contact
+## Conclusion
 
-For questions, issues, or contributions:
-- Open an issue on GitHub
-- Review component-specific documentation in respective README files
-- Check the main documentation at `/docs/voltchain-documentation.md`
+VoltChain demonstrates that decentralized energy markets are technically feasible and economically viable. By combining IoT sensors, blockchain technology, and user-friendly interfaces, the platform reduces barriers to entry for small-scale energy producers and creates new revenue streams from previously unmonetized surplus energy.
+
+The future of energy markets is decentralized, transparent, and accessible. VoltChain provides the infrastructure to make that future a reality.
