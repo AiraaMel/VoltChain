@@ -67,6 +67,11 @@ export default function TransactionsPage() {
   const [claims, setClaims] = useState<Claim[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
+  // Local state for earnings and histories
+  const [localEarnings, setLocalEarnings] = useState({ available: 0, total: 0 })
+  const [salesHistory, setSalesHistory] = useState<Array<{ id: string; date: string; kwh: number; total: number }>>([])
+  const [claimsHistory, setClaimsHistory] = useState<Array<{ id: string; amount: number; date: string }>>([])
+
   const pricePerKwh = 0.38; // $0.38 per kWh
 
   // Fetch earnings and history
@@ -226,6 +231,21 @@ export default function TransactionsPage() {
       setSaleStatus('success')
       setSaleMessage(`Transaction confirmed! Signature: ${signature.slice(0, 16)}...`)
       
+      // Update local earnings after successful sale
+      setLocalEarnings((prev) => ({
+        available: prev.available + totalUsd,
+        total: prev.total + totalUsd
+      }))
+      
+      // Add to sales history
+      const saleRecord = {
+        id: crypto.randomUUID(),
+        date: new Date().toLocaleString(),
+        kwh: kwhValue,
+        total: totalUsd
+      }
+      setSalesHistory((prev) => [saleRecord, ...prev])
+      
       // Clear input
       setKwh('10')
       
@@ -260,140 +280,30 @@ export default function TransactionsPage() {
     }
   }
 
-  const handleClaimEarnings = async () => {
-    if (!connected || !publicKey || !signTransaction || !connection) {
+  const handleClaimEarnings = () => {
+    if (localEarnings.available <= 0) {
       setClaimStatus('error')
-      setClaimMessage('Wallet not connected')
+      setClaimMessage('Nenhum valor disponível para saque.')
       return
     }
 
-    if (!earnings || earnings.available_to_claim <= 0) {
-      setClaimStatus('error')
-      setClaimMessage('No earnings available to claim')
-      return
+    const claim = {
+      id: crypto.randomUUID(),
+      amount: localEarnings.available,
+      date: new Date().toLocaleString(),
     }
-
-    setIsClaiming(true)
-    setClaimStatus('idle')
-    setClaimMessage('Checking balance...')
-
-    try {
-      // Check balance before sending
-      const balance = await connection.getBalance(publicKey)
-      if (balance < 1000000) { // 0.001 SOL
-        setClaimStatus('error')
-        setClaimMessage('Insufficient balance. Use https://faucet.solana.com to get Devnet SOL.')
-        return
-      }
-
-      const amount = earnings.available_to_claim
-      
-      // Generate unique nonce for transaction uniqueness
-      const nonce = Math.floor(Math.random() * 1000000)
-      
-      // Create memo with claim details (include timestamp and nonce to make it unique)
-      const memo = JSON.stringify({
-        type: 'claim',
-        amount: amount,
-        timestamp: Date.now(),
-        nonce: nonce
-      })
-
-      // Get fresh blockhash FIRST (critical for transaction uniqueness)
-      const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized')
-
-      setClaimMessage('Creating transaction...')
-
-      // Get recipient address from env or use a valid Devnet address
-      const recipientPubkey = process.env.NEXT_PUBLIC_MARKET_PUBKEY 
-        ? new PublicKey(process.env.NEXT_PUBLIC_MARKET_PUBKEY)
-        : publicKey // Fallback to user's own address
-
-      // Create NEW transaction with fresh blockhash
-      const transaction = new Transaction()
-      transaction.recentBlockhash = blockhash
-      transaction.feePayer = publicKey
-      
-      // Add transfer instruction with unique lamports amount
-      transaction.add(
-        SystemProgram.transfer({
-          fromPubkey: publicKey,
-          toPubkey: recipientPubkey,
-          lamports: 5000 + nonce, // Unique amount based on nonce
-        })
-      )
-      
-      // Add memo instruction
-      transaction.add(
-        createMemoInstruction(memo, [publicKey])
-      )
-
-      setClaimMessage('Signing transaction...')
-
-      // Sign transaction
-      const signedTransaction = await signTransaction(transaction)
-
-      setClaimMessage('Sending transaction...')
-
-      // Send transaction with error handling and retry logic
-      let signature: string
-      try {
-        signature = await connection.sendRawTransaction(
-          signedTransaction.serialize(),
-          { skipPreflight: false }
-        )
-        await connection.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, 'confirmed')
-        console.log('Transaction confirmed:', signature)
-      } catch (sendError: unknown) {
-        console.error('Simulation failed:', sendError)
-        if (sendError && typeof sendError === 'object' && 'getLogs' in sendError) {
-          const logs = await (sendError as { getLogs: () => Promise<string[]> }).getLogs()
-          console.log('Transaction logs:', logs)
-        }
-        
-        // Retry with skipPreflight
-        setClaimMessage('Retrying transaction...')
-        signature = await connection.sendRawTransaction(
-          signedTransaction.serialize(),
-          { skipPreflight: true }
-        )
-        await connection.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, 'confirmed')
-        console.log('Transaction confirmed (retry):', signature)
-      }
-
-      // Transaction confirmed on-chain - always show success
-      setClaimStatus('success')
-      setClaimMessage(`Transaction confirmed! Signature: ${signature.slice(0, 16)}...`)
-      
-      // Try to record in database (optional - don't fail if it errors)
-      try {
-        const response = await fetch('/api/claims', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            wallet: publicKey.toString(),
-            amount: amount,
-            signature: signature
-          })
-        })
-        
-        const result = await response.json()
-        if (result.success) {
-          // Refresh data
-          await fetchData()
-        }
-      } catch (dbError) {
-        console.log('Database recording failed (optional):', dbError)
-        // Don't fail the transaction - it's already confirmed on-chain
-      }
-
-    } catch (error) {
-      console.error('Claim error:', error)
-      setClaimStatus('error')
-      setClaimMessage(error instanceof Error ? error.message : 'Claim failed')
-    } finally {
-      setIsClaiming(false)
-    }
+    
+    setClaimsHistory((prev) => [claim, ...prev])
+    setLocalEarnings((prev) => ({ ...prev, available: 0 }))
+    
+    setClaimStatus('success')
+    setClaimMessage(`Saque realizado com sucesso: $${claim.amount.toFixed(2)}`)
+    
+    // Clear message after 3 seconds
+    setTimeout(() => {
+      setClaimMessage('')
+      setClaimStatus('idle')
+    }, 3000)
   }
 
   const getStatusIcon = (status: string) => {
@@ -460,28 +370,23 @@ export default function TransactionsPage() {
               <CardContent className="space-y-4">
                 <div className="text-center">
                   <div className="text-4xl font-bold text-gray-900 dark:text-white">
-                    ${earnings?.available_to_claim?.toFixed(2) || '0.00'}
+                    ${localEarnings.available.toFixed(2)}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Total Earned: ${earnings?.total_earned?.toFixed(2) || '0.00'}
+                    Total Earned: ${localEarnings.total.toFixed(2)}
                   </div>
                 </div>
                 <Button
                   onClick={handleClaimEarnings}
-                  disabled={!connected || isClaiming || (earnings?.available_to_claim || 0) <= 0}
-                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  disabled={localEarnings.available <= 0}
+                  className={`w-full ${
+                    localEarnings.available > 0 
+                      ? 'bg-blue-600 hover:bg-blue-700' 
+                      : 'bg-gray-400 cursor-not-allowed'
+                  }`}
                 >
-                  {isClaiming ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <ArrowDownLeft className="h-4 w-4 mr-2" />
-                      Claim Earnings
-                    </>
-                  )}
+                  <ArrowDownLeft className="h-4 w-4 mr-2" />
+                  Claim Earnings
                 </Button>
                 {claimMessage && (
                   <div className={`text-center text-sm ${
@@ -570,27 +475,27 @@ export default function TransactionsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {transactions.length === 0 ? (
+                {salesHistory.length === 0 ? (
                   <p className="text-center text-gray-500 py-8">
                     No sales recorded yet
                   </p>
                 ) : (
                   <div className="space-y-2">
-                    {transactions.map((tx) => (
-                      <div key={tx.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    {salesHistory.map((sale) => (
+                      <div key={sale.id} className="flex items-center justify-between p-3 border rounded-lg">
                         <div className="flex items-center space-x-3">
-                          {getStatusIcon(tx.tx_status)}
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
                           <div>
-                            <p className="font-medium">{tx.kwh} kWh</p>
+                            <p className="font-medium">{sale.kwh} kWh</p>
                             <p className="text-sm text-gray-500">
-                              {new Date(tx.created_at).toLocaleString()}
+                              {sale.date}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="font-medium">${tx.total_usd.toFixed(2)}</p>
+                          <p className="font-medium">${sale.total.toFixed(2)}</p>
                           <p className="text-xs text-gray-500">
-                            {tx.tx_status}
+                            confirmed
                           </p>
                         </div>
                       </div>
@@ -609,27 +514,27 @@ export default function TransactionsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {claims.length === 0 ? (
+                {claimsHistory.length === 0 ? (
                   <p className="text-center text-gray-500 py-8">
                     No claims recorded yet
                   </p>
                 ) : (
                   <div className="space-y-2">
-                    {claims.map((claim) => (
+                    {claimsHistory.map((claim) => (
                       <div key={claim.id} className="flex items-center justify-between p-3 border rounded-lg">
                         <div className="flex items-center space-x-3">
-                          {getStatusIcon(claim.status)}
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
                           <div>
                             <p className="font-medium">Claim</p>
                             <p className="text-sm text-gray-500">
-                              {new Date(claim.requested_at).toLocaleString()}
+                              {claim.date}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
                           <p className="font-medium">${claim.amount.toFixed(2)}</p>
                           <p className="text-xs text-gray-500">
-                            {claim.status}
+                            completed
                           </p>
                         </div>
                       </div>
