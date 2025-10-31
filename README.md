@@ -17,8 +17,9 @@ voltchain-platform/
 | Component  | Status      | Description |
 |------------|-------------|-------------|
 | Backend    | Implemented | REST API MVP with Express, Supabase and Solana integration |
+| Frontend   | Implemented | Next.js dashboard with wallet integration and transactions |
+| Transactions| Implemented | C2B sales and claim earnings with real Solana Devnet transactions |
 | On-chain   | Planned     | Anchor program for Solana |
-| Frontend   | Planned     | React/Next.js interface |
 | IoT        | Planned     | ESP32/Arduino devices |
 
 ## Implemented Features
@@ -31,12 +32,28 @@ voltchain-platform/
 - Endpoints for devices, readings and blockchain
 - Structured logging with Pino
 
+### Frontend MVP (Dashboard)
+- Next.js 16 with React 19
+- Solana wallet integration (Phantom)
+- Energy production monitoring
+- Sales & pricing analytics
+- **C2B Transactions & Claim Earnings** ✨ NEW!
+- IoT device management
+- Real-time dashboard
+
 ### Available Endpoints
 - `GET /healthz` - Health check
 - `POST /v1/devices` - Create device (admin)
 - `POST /v1/ingest` - Ingest reading (HMAC)
 - `GET /v1/devices/:id/readings` - List readings (admin)
 - `POST /v1/onchain/flush` - Flush readings to blockchain (admin)
+
+### C2B Transactions API (NEW!)
+- `POST /api/transactions` - Record energy sale with Solana transaction
+- `GET /api/transactions?wallet=...` - Get sales history
+- `GET /api/earnings?wallet=...` - Get wallet balance
+- `POST /api/claims` - Claim earnings with Solana transaction
+- `GET /api/claims?wallet=...` - Get claims history
 
 ## Technologies
 
@@ -47,10 +64,19 @@ voltchain-platform/
 - Solana Web3.js for blockchain integration
 - Pino for logging
 
+### Frontend (Implemented)
+- Next.js 16 with React 19 and TypeScript
+- Solana wallet adapter with Phantom integration
+- Tailwind CSS for styling
+- Radix UI components
+- Real-time data polling
+- Supabase client integration
+
 ### Planned
 - Anchor Framework for Solana program
-- React 18+ with Next.js for frontend
 - ESP32/Arduino for IoT devices
+- Enhanced authentication
+- WebSocket real-time updates
 
 ## Quick Start
 
@@ -136,9 +162,16 @@ ADMIN_TOKEN=dev-admin-token
 
 ## Documentation
 
+### Feature Documentation
+- **[Transactions README](TRANSACTIONS_README.md)** - C2B sales and claim earnings (⭐ NEW!)
+- **[Quick Start Guide](QUICK_START.md)** - Get started in 5 minutes
+- **[Environment Setup](ENV_SETUP.md)** - Configure your environment
+- **[Implementation Summary](IMPLEMENTATION_SUMMARY.md)** - Technical overview
+
+### Component Documentation
 - [Backend README](backend/README.md) - API and configuration
 - [On-chain README](onchain/README.md) - Solana program
-- [Frontend README](frontend/README.md) - Web interface
+- [Frontend README](dashboard/README.md) - Web interface
 - [IoT README](iot/README.md) - IoT devices
 
 ## Contributing

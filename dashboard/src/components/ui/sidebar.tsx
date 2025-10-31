@@ -7,7 +7,8 @@ import {
   Zap, 
   TrendingUp, 
   Wallet, 
-  Settings 
+  Settings,
+  Receipt
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -18,6 +19,7 @@ const navigation = [
   { name: "Energy Production", href: "/production", icon: Zap },
   { name: "Sales & Pricing", href: "/sales", icon: TrendingUp },
   { name: "Wallet & Earnings", href: "/wallet", icon: Wallet },
+  { name: "Transactions", href: "/transactions", icon: Receipt },
   { name: "IoT Devices", href: "/iot", icon: Settings },
 ]
 
