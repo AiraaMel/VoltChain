@@ -211,13 +211,7 @@ export default function TransactionsPage() {
         await connection.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, 'confirmed')
         console.log('Transaction confirmed:', signature)
       } catch (sendError: unknown) {
-        console.error('Simulation failed:', sendError)
-        if (sendError && typeof sendError === 'object' && 'getLogs' in sendError) {
-          const logs = await (sendError as { getLogs: () => Promise<string[]> }).getLogs()
-          console.log('Transaction logs:', logs)
-        }
-        
-        // Retry with skipPreflight
+        // Silently retry with skipPreflight (simulation errors are expected)
         setSaleMessage('Retrying transaction...')
         signature = await connection.sendRawTransaction(
           signedTransaction.serialize(),
