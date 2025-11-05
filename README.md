@@ -178,6 +178,10 @@ Comprehensive documentation is available in the `/docs` directory:
 - [Architecture](./docs/architecture.md) - Detailed technical architecture and system design
 - [Setup Guide](./docs/setup.md) - Complete setup and configuration instructions
 
+## Videos
+- [Pitch](https://youtu.be/UCNzRJxYp1A)
+- [Demo](https://youtu.be/g3EDrboOeZ0)
+
 ## Roadmap
 
 - **Phase 1 (MVP)**: Core tokenization and dashboard functionality
